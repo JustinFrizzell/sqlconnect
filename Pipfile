@@ -10,3 +10,5 @@ pyyaml = "*"
 pyodbc = "*"
 
 [dev-packages]
+setuptools = "*"
+wheel = "*"
