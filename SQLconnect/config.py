@@ -3,16 +3,21 @@ from pathlib import Path
 import yaml
 
 
-def get_connection_config(connection_name: str) -> dict:
+def get_connection_config(connection_name: str, config_path: str = None) -> dict:
     """Using pathlib to read the YAML file."""
-    config_text = Path("connections.yaml").read_text(encoding="utf-8")
+
+    if config_path is not None:
+        config_text = Path(config_path).read_text(encoding="utf-8")
+    else:
+        config_text = Path("connections.yaml").read_text(encoding="utf-8")
+
     config = yaml.safe_load(config_text)
     return config["connections"][connection_name]
 
 
-def get_db_url(connection_name: str) -> str:
-    """Returns a connection string"""
-    connection_config = get_connection_config(connection_name)
+def get_db_url(connection_config: dict) -> str:
+    """Returns a connection string from a dict"""
+
     sqlalchemy_driver = connection_config["sqlalchemy_driver"]
     odbc_driver = connection_config["odbc_driver"]
     server = connection_config["server"]
