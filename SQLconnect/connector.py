@@ -23,14 +23,14 @@ class SQLconnector:
                 # Instantiation with only the connection name (default config)
                 config_dict = config.get_connection_config(connection_name)
 
-        self.configuration = config.get_db_url(config_dict)
+        self.database_url = config.get_db_url(config_dict)
 
         self.__engine = None
         self.__create_engine()
 
     def __create_engine(self):
         """Create a SQLAlchemy engine using configuration from a YAML file."""
-        self.__engine = sqlalchemy.create_engine(self.configuration)
+        self.__engine = sqlalchemy.create_engine(self.database_url)
 
     def query_to_df(self, query_path: str) -> pd.DataFrame:
         """Executes a SQL query from a file and returns a pandas DataFrame."""
