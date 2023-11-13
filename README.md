@@ -61,4 +61,4 @@ Replace the placeholder values with your actual database connection details.
 
 ## License
 
-This project is licensed under the [MIT License](LICENCE).
+This project is licensed under the [MIT License](https://raw.githubusercontent.com/JustinFrizzell/SQLconnect/main/LICENCE).
