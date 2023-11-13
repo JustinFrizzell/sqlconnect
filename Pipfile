@@ -8,6 +8,7 @@ pandas = "*"
 sqlalchemy = "*"
 pyyaml = "*"
 pyodbc = "*"
+python-dotenv = "*"
 
 [dev-packages]
 setuptools = "*"
