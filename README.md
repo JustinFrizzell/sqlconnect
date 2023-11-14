@@ -22,13 +22,13 @@ Here's a quick example to get you started:
 import SQLconnect as sc
 
 # Establish a connection to the database
-connection = sc.SQLconnector("WorldWideImporters")
+connection = sc.SQLconnector("Database_PROD")
 
 # Assign the results of a query to a pandas DataFrame
 df = connection.query_to_df("query.sql")
 
 # Print the top 5 rows of the DataFrame
-print(df.head(5))
+print(df.head())
 
 # Print the connection details
 print(f"connection_name: {connection.connection_name}")
@@ -37,28 +37,52 @@ print(f"database_url: {connection.database_url}")
 
 ## Configuration
 
-To use SQLconnect, create a `connections.yaml` file in your project directory with the following example structure:
+To use SQLconnect, create a `connections.yaml` file in the root of your project directory with the following example structure:
 
 ```yaml
 connections:
   Database_DEV:
     sqlalchemy_driver: 'mssql+pyodbc'
-    odbc_driver: 'SQL Server'
+    odbc_driver: 'SQL+Server'
     server: 'dev-server.database.com'
-    database: 'DevDB'
+    database: 'DevDB'   
     options:
       - 'Trusted_Connection=Yes'
+  Database_TEST:
+    sqlalchemy_driver: 'mssql+pyodbc'
+    odbc_driver: 'SQL+Server'
+    server: 'test-server.database.com'
+    database: 'TestDB' 
+    username: '${DB_TEST_USERNAME}' # This references the environment variable DB_TEST_USERNAME setup in .env
+    password: '${DB_TEST_PASSWORD}' # This references the environment variable DB_TEST_PASSWORD setup in .env    
+    options:
+      - 'Trusted_Connection=No'
   Database_PROD:
     sqlalchemy_driver: 'mssql+pyodbc'
-    odbc_driver: 'SQL Server'
+    odbc_driver: 'SQL+Server'
     server: 'prod-server.database.com'
     database: 'ProdDB'
+    username: '${DB_PROD_USERNAME}' # This references the environment variable DB_PROD_USERNAME setup in .env
+    password: '${DB_PROD_PASSWORD}' # This references the environment variable DB_PROD_PASSWORD setup in .env
     options:
-      - 'Trusted_Connection=Yes'
+      - 'Trusted_Connection=No'
 ```
 
-Replace the placeholder values with your actual database connection details.
+Also create a `.env` file in the root of your project directory with the following example structure:
+
+```bash
+# This file should be kept secure and not checked into version control.
+# Development Database Credentials
+DB_TEST_USERNAME=devUser
+DB_TEST_PASSWORD=devPassword
+
+# Production Database Credentials
+DB_PROD_USERNAME=prodUser
+DB_PROD_PASSWORD=prodPassword
+```
+
+Replace the example values with your actual database connection details.
 
 ## License
 
-This project is licensed under the [MIT License](LICENCE).
+This project is licensed under the [MIT License](https://raw.githubusercontent.com/JustinFrizzell/SQLconnect/main/LICENCE).
