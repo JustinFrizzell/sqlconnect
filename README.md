@@ -1,6 +1,10 @@
-# SQLconnect
+<div align="center">
+  <img src="images/logo.png"><br>
+</div>
 
-SQLconnect is a Python package designed to simplify the process of connecting to SQL databases. It uses a `connections.yaml` file to securely store database connection details and allows users to execute SQL queries stored in `.sql` files. This package is particularly useful for data analysts and developers who need a straightforward way to interact with SQL databases.
+---
+
+**SQLconnect** is a Python package designed to simplify the process of connecting to SQL databases. It uses a `connections.yaml` file to securely store database connection details and allows users to execute SQL queries stored in `.sql` files. This package is particularly useful for data analysts and developers who need a straightforward way to interact with SQL databases.
 
 ## Features
 
@@ -21,18 +25,14 @@ Here's a quick example to get you started:
 ```python
 import SQLconnect as sc
 
-# Establish a connection to the database
+# Set up a database connection, all configuration is handled with connections.yaml and .env
 connection = sc.SQLconnector("Database_PROD")
 
 # Assign the results of a query to a pandas DataFrame
-df = connection.query_to_df("query.sql")
+df = connection.sql_to_df("query.sql")
 
-# Print the top 5 rows of the DataFrame
-print(df.head())
-
-# Print the connection details
-print(f"connection_name: {connection.connection_name}")
-print(f"database_url: {connection.database_url}")
+# Explore the dataframe with Pandas
+print(df.describe())
 ```
 
 ## Configuration
@@ -48,22 +48,24 @@ connections:
     database: 'DevDB'   
     options:
       - 'Trusted_Connection=Yes'
+      
   Database_TEST:
     sqlalchemy_driver: 'mssql+pyodbc'
     odbc_driver: 'SQL+Server'
     server: 'test-server.database.com'
     database: 'TestDB' 
-    username: '${DB_TEST_USERNAME}' # This references the environment variable DB_TEST_USERNAME setup in .env
-    password: '${DB_TEST_PASSWORD}' # This references the environment variable DB_TEST_PASSWORD setup in .env    
+    username: '${DB_TEST_USERNAME}' # References DB_TEST_USERNAME in .env
+    password: '${DB_TEST_PASSWORD}' # References DB_TEST_PASSWORD in .env    
     options:
       - 'Trusted_Connection=No'
+
   Database_PROD:
     sqlalchemy_driver: 'mssql+pyodbc'
     odbc_driver: 'SQL+Server'
     server: 'prod-server.database.com'
     database: 'ProdDB'
-    username: '${DB_PROD_USERNAME}' # This references the environment variable DB_PROD_USERNAME setup in .env
-    password: '${DB_PROD_PASSWORD}' # This references the environment variable DB_PROD_PASSWORD setup in .env
+    username: '${DB_PROD_USERNAME}' # References DB_PROD_USERNAME in .env
+    password: '${DB_PROD_PASSWORD}' # References DB_PROD_PASSWORD in .env
     options:
       - 'Trusted_Connection=No'
 ```

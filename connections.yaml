@@ -3,9 +3,17 @@ connections:
     sqlalchemy_driver: 'mssql+pyodbc'
     odbc_driver: 'SQL+Server'
     server: 'dev-server.database.com'
-    database: 'DevDB'
-    username: '${DB_DEV_USERNAME}'
-    password: '${DB_DEV_PASSWORD}'
+    database: 'DevDB'   
+    options:
+      - 'Trusted_Connection=Yes'
+      
+  Database_TEST:
+    sqlalchemy_driver: 'mssql+pyodbc'
+    odbc_driver: 'SQL+Server'
+    server: 'test-server.database.com'
+    database: 'TestDB' 
+    username: '${DB_TEST_USERNAME}' # This references the environment variable DB_TEST_USERNAME setup in .env
+    password: '${DB_TEST_PASSWORD}' # This references the environment variable DB_TEST_PASSWORD setup in .env    
     options:
       - 'Trusted_Connection=No'
 
@@ -14,23 +22,23 @@ connections:
     odbc_driver: 'SQL+Server'
     server: 'prod-server.database.com'
     database: 'ProdDB'
-    username: '${DB_PROD_USERNAME}'
-    password: '${DB_PROD_PASSWORD}'
+    username: '${DB_PROD_USERNAME}' # This references the environment variable DB_PROD_USERNAME setup in .env
+    password: '${DB_PROD_PASSWORD}' # This references the environment variable DB_PROD_PASSWORD setup in .env
     options:
       - 'Trusted_Connection=No'
-
-  Database_TRUSTED:
-    sqlalchemy_driver: 'mssql+pyodbc'
-    odbc_driver: 'SQL+Server'
-    server: 'trusted-server.database.com'
-    database: 'TrustedDB'
-    options:
-      - 'Trusted_Connection=Yes'
   
   WorldWideImporters:
     sqlalchemy_driver: 'mssql+pyodbc'
     odbc_driver: 'SQL+Server'
     server: 'DESKTOP-Q3UR0VP\SQLEXPRESS'
     database: 'WideWorldImporters'
+    options:
+      - 'Trusted_Connection=Yes'
+  
+  Logger:
+    sqlalchemy_driver: 'mssql+pyodbc'
+    odbc_driver: 'SQL+Server'
+    server: 'DESKTOP-Q3UR0VP\SQLEXPRESS'
+    database: 'Logger'
     options:
       - 'Trusted_Connection=Yes'
