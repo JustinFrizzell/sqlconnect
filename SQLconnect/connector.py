@@ -26,31 +26,30 @@ class SQLconnector:
 
         self.__database_url = config.get_db_url(config_dict)
 
-        self.__engine = None
-        self.__create_engine()
+        self.engine = self.__create_engine()
 
     def __create_engine(self):
         """Create a SQLAlchemy engine using configuration from a YAML file."""
-        self.__engine = sqlalchemy.create_engine(self.__database_url)
+        return sqlalchemy.create_engine(self.__database_url)
 
     def sql_to_df(self, query_path: str) -> pd.DataFrame:
         """Executes a SQL query from a file and returns a pandas DataFrame."""
         try:
             query = Path(query_path).read_text(encoding="utf-8")
-            return pd.read_sql_query(query, self.__engine)
+            return pd.read_sql_query(query, self.engine)
         except Exception as e:
             raise RuntimeError(f"Error executing query: {e}")
 
     def sql_to_df_str(self, query: str) -> pd.DataFrame:
         """Executes a SQL query from a string and returns a pandas DataFrame."""
         try:
-            return pd.read_sql_query(query, self.__engine)
+            return pd.read_sql_query(query, self.engine)
         except Exception as e:
             raise RuntimeError(f"Error executing query: {e}")
 
     def execute_sql(self, sql_path: str) -> None:
         """Executes a SQL command from a file."""
-        with self.__engine.connect() as connection:
+        with self.engine.connect() as connection:
             trans = connection.begin()
             try:
                 command = Path(sql_path).read_text(encoding="utf-8")
@@ -63,7 +62,7 @@ class SQLconnector:
 
     def execute_sql_str(self, command: str) -> None:
         """Executes a SQL command from a string."""
-        with self.__engine.connect() as connection:
+        with self.engine.connect() as connection:
             trans = connection.begin()
             try:
                 command = text(command.replace("\n", " "))
