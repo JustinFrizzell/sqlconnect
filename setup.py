@@ -3,7 +3,7 @@ from pathlib import Path
 
 setuptools.setup(
     name="SQLconnect",
-    version="0.1.0",
+    version="0.1.1",
     author="Justin Frizzell",
     description=""" Package to simplify connections to SQL databases. """,
     long_description=Path("README.md").read_text(encoding="utf=8"),
