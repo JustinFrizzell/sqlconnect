@@ -42,8 +42,8 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
     """
     Retrieves the configuration for a specified connection from a YAML file.
 
-    This function searches for a YAML configuration file either in a provided path 
-    or in default locations. It reads the file and extracts the configuration for 
+    This function searches for a YAML configuration file either in a provided path
+    or in default locations. It reads the file and extracts the configuration for
     the specified connection name.
 
     Parameters
@@ -52,7 +52,7 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
         The name of the connection for which the configuration is to be retrieved.
     config_path : str, optional
         The path to the configuration file. If not provided, the function searches
-        in 'connections.yaml' or 'connections.yml' in the current directory, and 
+        in 'connections.yaml' or 'connections.yml' in the current directory, and
         then in the user's home directory.
 
     Returns
@@ -75,7 +75,7 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
 
     Notes
     -----
-    The function uses `pathlib.Path` for path manipulations and `yaml.safe_load` 
+    The function uses `pathlib.Path` for path manipulations and `yaml.safe_load`
     for reading the YAML file.
     """
 
@@ -94,16 +94,22 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
         if path.exists():
             config_text = path.read_text(encoding="utf-8")
             config = yaml.safe_load(config_text)
-            
+
             connection_config = config["connections"].get(connection_name)
             if not connection_config:
-                raise KeyError(f"Connection configuration for '{connection_name}' not found")
+                raise KeyError(
+                    f"Connection configuration for '{connection_name}' not found"
+                )
 
             # Check if all required keys are present
             required_keys = ["sqlalchemy_driver", "odbc_driver", "server", "database"]
-            missing_keys = [key for key in required_keys if key not in connection_config]
+            missing_keys = [
+                key for key in required_keys if key not in connection_config
+            ]
             if missing_keys:
-                raise KeyError(f"Missing required configuration keys: {', '.join(missing_keys)} for connection '{connection_name}'")
+                raise KeyError(
+                    f"Missing required configuration keys: {', '.join(missing_keys)} for connection '{connection_name}'"
+                )
 
             return connection_config
 
@@ -119,15 +125,15 @@ def get_db_url(connection_config: dict) -> str:
 
     This function builds a database connection string suitable for SQLAlchemy, using
     details provided in a configuration dictionary. It handles the inclusion of
-    authentication details securely by retrieving them from environment variables if 
+    authentication details securely by retrieving them from environment variables if
     necessary.
 
     Parameters
     ----------
     connection_config : dict
-        A dictionary containing the database connection parameters. Expected keys include 
-        'sqlalchemy_driver', 'odbc_driver', 'server', 'database', and optionally 'username', 
-        'password', and 'options'. The 'username' and 'password' can be environment variable 
+        A dictionary containing the database connection parameters. Expected keys include
+        'sqlalchemy_driver', 'odbc_driver', 'server', 'database', and optionally 'username',
+        'password', and 'options'. The 'username' and 'password' can be environment variable
         keys enclosed in curly braces (e.g., "${ENV_VAR}").
 
     Returns
@@ -139,7 +145,7 @@ def get_db_url(connection_config: dict) -> str:
     ------
     EnvironmentError
         If 'username' and/or 'password' are specified as environment variables in the configuration
-        and these variables are not found in either the current directory's '.env' file or the 
+        and these variables are not found in either the current directory's '.env' file or the
         user's home directory '.env' file.
 
     Examples
@@ -157,7 +163,7 @@ def get_db_url(connection_config: dict) -> str:
 
     Notes
     -----
-    The function checks for '.env' files in the current directory and the user's home directory 
+    The function checks for '.env' files in the current directory and the user's home directory
     for environment variables if 'username' and 'password' are provided as environment variable keys.
     It uses `os.getenv` to retrieve these environment variables.
     """
@@ -186,7 +192,7 @@ def get_db_url(connection_config: dict) -> str:
         if username is None or password is None:
             raise EnvironmentError(
                 f"Environment variables '{env_username_key}' and/or '{env_password_key}' not "
-                f"found in {Path(".env").absolute()} or {Path.home() / ".env"}"
+                f"found in {Path('.env').absolute()} or {Path.home() / '.env'}"
             )
 
         auth_details = f"{username}:{password}@"
