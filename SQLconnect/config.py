@@ -1,4 +1,37 @@
-""" Handles validating and loading the connection configuration file """
+"""
+This module provides functionality for loading and validating SQL database connection configurations,
+used primarily by the SQLconnector class for establishing database connections.
+
+The module includes functions to retrieve connection configurations from a YAML file and to construct a 
+database connection URL. It supports dynamic configuration through file paths and dictionaries, and handles 
+secure storage of sensitive details (e.g., usernames and passwords) through environment variables.
+
+Functions:
+    get_connection_config: Retrieves the configuration for a specified connection from a YAML file.
+    get_db_url: Constructs and returns a database connection string from a given configuration dictionary.
+
+Used By:
+    - SQLconnector: This class in a separate module utilises the functions provided here to manage database 
+      connections and operations.
+
+Dependencies:
+    - os: Used for environment variable management.
+    - pathlib: For file path manipulations.
+    - yaml: Required for parsing YAML configuration files.
+    - dotenv: Used for loading environment variables from '.env' files.
+
+Example Usage:
+    # Used within SQLconnector class
+    config = get_connection_config('my_connection')
+    db_url = get_db_url(config)
+
+Notes:
+    - Configuration files should define connection parameters like 'sqlalchemy_driver', 'odbc_driver', 
+      'server', 'database', and optionally 'username', 'password'.
+    - Usernames and passwords should be referenced as environment variables in the format '${ENV_VAR}'.
+    - Attempts to load '.env' files from the current directory or the user's home directory for environment 
+      variables.
+"""
 import os
 from pathlib import Path
 import yaml
