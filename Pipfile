@@ -13,3 +13,4 @@ python-dotenv = "*"
 [dev-packages]
 setuptools = "*"
 wheel = "*"
+pytest = "*"

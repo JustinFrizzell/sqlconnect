@@ -6,9 +6,46 @@ from dotenv import load_dotenv
 
 
 def get_connection_config(connection_name: str, config_path: str = None) -> dict:
-    """Using pathlib to read the YAML file."""
+    """
+    Retrieves the configuration for a specified connection from a YAML file.
 
-    # List of potential paths for the configuration file
+    This function searches for a YAML configuration file either in a provided path 
+    or in default locations. It reads the file and extracts the configuration for 
+    the specified connection name.
+
+    Parameters
+    ----------
+    connection_name : str
+        The name of the connection for which the configuration is to be retrieved.
+    config_path : str, optional
+        The path to the configuration file. If not provided, the function searches
+        in 'connections.yaml' or 'connections.yml' in the current directory, and 
+        then in the user's home directory.
+
+    Returns
+    -------
+    dict
+        A dictionary containing the configuration for the specified connection.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the configuration file cannot be found in any of the default or provided paths.
+
+    Examples
+    --------
+    >>> get_connection_config("my_connection")
+    { ... }  # Returns the configuration dictionary for 'my_connection'.
+
+    >>> get_connection_config("my_connection", "/path/to/custom/config.yaml")
+    { ... }  # Returns the configuration dictionary from the specified custom path.
+
+    Notes
+    -----
+    The function uses `pathlib.Path` for path manipulations and `yaml.safe_load` 
+    for reading the YAML file.
+    """
+
     config_paths = (
         [Path(config_path)]
         if config_path
@@ -24,7 +61,18 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
         if path.exists():
             config_text = path.read_text(encoding="utf-8")
             config = yaml.safe_load(config_text)
-            return config["connections"][connection_name]
+            
+            connection_config = config["connections"].get(connection_name)
+            if not connection_config:
+                raise KeyError(f"Connection configuration for '{connection_name}' not found")
+
+            # Check if all required keys are present
+            required_keys = ["sqlalchemy_driver", "odbc_driver", "server", "database"]
+            missing_keys = [key for key in required_keys if key not in connection_config]
+            if missing_keys:
+                raise KeyError(f"Missing required configuration keys: {', '.join(missing_keys)} for connection '{connection_name}'")
+
+            return connection_config
 
     raise FileNotFoundError(
         f"Config file not found in {Path('connections.yaml').absolute()} "
