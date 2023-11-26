@@ -81,7 +81,53 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
 
 
 def get_db_url(connection_config: dict) -> str:
-    """Returns a connection string from a dict"""
+    """
+    Constructs and returns a database connection string from the given configuration dictionary.
+
+    This function builds a database connection string suitable for SQLAlchemy, using
+    details provided in a configuration dictionary. It handles the inclusion of
+    authentication details securely by retrieving them from environment variables if 
+    necessary.
+
+    Parameters
+    ----------
+    connection_config : dict
+        A dictionary containing the database connection parameters. Expected keys include 
+        'sqlalchemy_driver', 'odbc_driver', 'server', 'database', and optionally 'username', 
+        'password', and 'options'. The 'username' and 'password' can be environment variable 
+        keys enclosed in curly braces (e.g., "${ENV_VAR}").
+
+    Returns
+    -------
+    str
+        The constructed database connection string.
+
+    Raises
+    ------
+    EnvironmentError
+        If 'username' and/or 'password' are specified as environment variables in the configuration
+        and these variables are not found in either the current directory's '.env' file or the 
+        user's home directory '.env' file.
+
+    Examples
+    --------
+    >>> connection_config = {
+    ...     "sqlalchemy_driver": "mssql+pyodbc",
+    ...     "odbc_driver": "ODBC Driver 17 for SQL Server",
+    ...     "server": "my_server",
+    ...     "database": "my_database",
+    ...     "username": "${DB_USER}",
+    ...     "password": "${DB_PASS}"
+    ... }
+    >>> get_db_url(connection_config)
+    'mssql+pyodbc://username:password@my_server/my_database?driver=ODBC Driver 17 for SQL Server'
+
+    Notes
+    -----
+    The function checks for '.env' files in the current directory and the user's home directory 
+    for environment variables if 'username' and 'password' are provided as environment variable keys.
+    It uses `os.getenv` to retrieve these environment variables.
+    """
 
     sqlalchemy_driver = connection_config["sqlalchemy_driver"]
     odbc_driver = connection_config["odbc_driver"]

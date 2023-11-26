@@ -2,6 +2,8 @@ import pytest
 import yaml
 from SQLconnect import config
 
+# Testing config.get_connection_config()
+
 # Mock data for testing get_connection_config where a config path is supplied
 TEST_CONFIG_DICT = {
     "connections": {
@@ -93,3 +95,63 @@ def test_get_connection_config_missing_details(mock_config_missing_details):
         config.get_connection_config(
             "Database_MISSING", str(mock_config_missing_details)
         )
+
+
+# Testing config.get_db_url()
+
+
+# Fixture for a basic connection configuration
+@pytest.fixture
+def basic_config():
+    return {
+        "sqlalchemy_driver": "mssql+pyodbc",
+        "odbc_driver": "ODBC Driver 17 for SQL Server",
+        "server": "my_server",
+        "database": "my_database",
+    }
+
+
+# Test for correct connection string generation
+def test_get_db_url_correct_connection_string(basic_config):
+    expected_string = (
+        "mssql+pyodbc://my_server/my_database?driver=ODBC Driver 17 for SQL Server"
+    )
+    assert config.get_db_url(basic_config) == expected_string
+
+
+# Test for missing configuration keys
+def test_get_db_url_missing_configuration_keys(basic_config):
+    del basic_config["server"]
+    with pytest.raises(KeyError):
+        config.get_db_url(basic_config)
+
+
+# Test for environment variable authentication
+def test_get_db_url_env_var_authentication(monkeypatch):
+    monkeypatch.setenv("DB_USER", "test_user")
+    monkeypatch.setenv("DB_PASS", "test_pass")
+    configuration = {
+        "sqlalchemy_driver": "mssql+pyodbc",
+        "odbc_driver": "ODBC Driver 17 for SQL Server",
+        "server": "my_server",
+        "database": "my_database",
+        "username": "${DB_USER}",
+        "password": "${DB_PASS}",
+    }
+    expected_string = "mssql+pyodbc://test_user:test_pass@my_server/my_database?driver=ODBC Driver 17 for SQL Server"
+    assert config.get_db_url(configuration) == expected_string
+
+
+# Test for missing environment variables
+def test_get_db_url_missing_environment_variables(monkeypatch, basic_config):
+    basic_config.update({"username": "${DB_USER}", "password": "${DB_PASS}"})
+    monkeypatch.delenv("DB_USER", raising=False)
+    monkeypatch.delenv("DB_PASS", raising=False)
+    with pytest.raises(EnvironmentError):
+        config.get_db_url(basic_config)
+
+
+# Test for empty configuration dictionary
+def test_get_db_url_empty_configuration():
+    with pytest.raises(KeyError):
+        config.get_db_url({})
