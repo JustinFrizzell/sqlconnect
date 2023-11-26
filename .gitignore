@@ -1,6 +1,12 @@
+# IDE
+.vscode/
+
+# package
 build/
 dist/
 *.egg-info/
 .env
 *.pyc
-.vscode/
+
+# docs
+_build/
