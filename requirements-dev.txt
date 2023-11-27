@@ -2,4 +2,4 @@ setuptools
 wheel
 pytest
 sphinx
-sphinx-rtd-theme
+furo
