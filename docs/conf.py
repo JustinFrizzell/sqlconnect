@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.abspath("../"))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "SQLconnect"
+project = "sqlconnect"
 copyright = "2023, Justin Frizzell"
 author = "Justin Frizzell"
 release = "0.1.1"
@@ -44,4 +44,4 @@ html_theme = "sphinx_rtd_theme"
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = "SQLconnect"
+htmlhelp_basename = "sqlconnect"

@@ -6,4 +6,4 @@ To install with pip run:
 
 .. code-block:: bash
 
-    pip install SQLconnect
+    pip install sqlconnect

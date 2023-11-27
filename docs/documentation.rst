@@ -6,5 +6,5 @@ Documentation
 Connector module
 ----------------
 
-.. automodule:: SQLconnect.connector
+.. automodule:: sqlconnect.connector
 	:members:

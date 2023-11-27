@@ -1,13 +1,13 @@
 <div align="center">
-  <img alt="SQLconnect logo" src="https://raw.githubusercontent.com/JustinFrizzell/SQLconnect/main/images/logo.png"><br>
+  <img alt="SQLconnect logo" src="https://raw.githubusercontent.com/JustinFrizzell/sqlconnect/main/images/logo.png"><br>
 </div>
 
 ---
 
 <p align="center">
-<a href="https://pypi.org/project/SQLconnect/"><img alt="PyPI" src="https://img.shields.io/pypi/v/SQLconnect"></a>
+<a href="https://pypi.org/project/sqlconnect/"><img alt="PyPI" src="https://img.shields.io/pypi/v/sqlconnect"></a>
 <a href='https://sqlconnect.readthedocs.io/en/latest/?badge=latest'><img src='https://readthedocs.org/projects/sqlconnect/badge/?version=latest' alt='Documentation Status' /></a>
-<a href="https://github.com/JustinFrizzell/SQLconnect/blob/main/LICENCE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-purple.svg"></a>
+<a href="https://github.com/JustinFrizzell/sqlconnect/blob/main/LICENCE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-purple.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
 
@@ -30,7 +30,7 @@
 ## Installation
 
 ```bash
-pip install SQLconnect
+pip install sqlconnect
 ```
 
 ## Configuration
@@ -66,10 +66,10 @@ Replace the example values with your actual database connection details.
 Here's a quick example to get you started:
 
 ```python
-import SQLconnect as sc
+import sqlconnect as sc
 
 # Set up a database connection, all configuration is handled with connections.yaml and .env
-connection = sc.SQLconnector("Database_PROD")
+connection = sc.Sqlconnector("Database_PROD")
 
 # Assign the results of a query to a pandas DataFrame
 df = connection.sql_to_df("your_query.sql")
@@ -84,4 +84,4 @@ Full documentation for SQLconnect can be found at https://sqlconnect.readthedocs
 
 ## License
 
-This project is licensed under the [MIT License](https://raw.githubusercontent.com/JustinFrizzell/SQLconnect/main/LICENCE).
+This project is licensed under the [MIT License](https://raw.githubusercontent.com/JustinFrizzell/sqlconnect/main/LICENCE).

@@ -9,10 +9,10 @@ Here's a quick example to get you started:
 
 .. code-block:: python
 
-    import SQLconnect as sc
+    import sqlconnect as sc
 
     # Set up a database connection, all configuration is handled with connections.yaml and .env
-    connection = sc.SQLconnector("Database_PROD")
+    connection = sc.Sqlconnector("Database_PROD")
 
     # Assign the results of a query to a pandas DataFrame
     df = connection.sql_to_df("query.sql")

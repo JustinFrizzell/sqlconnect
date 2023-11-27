@@ -1,17 +1,17 @@
-.. image:: https://raw.githubusercontent.com/JustinFrizzell/SQLconnect/main/images/logo.png
-   :alt: SQLconnect Logo
+.. image:: https://raw.githubusercontent.com/JustinFrizzell/sqlconnect/main/images/logo.png
+   :alt: sqlconnect Logo
    :align: center
 
 .. raw:: html
 
    <div style="text-align: center;">
-      <a href="https://pypi.org/project/SQLconnect/">
-         <img src="https://img.shields.io/pypi/v/SQLconnect" alt="PyPI">
+      <a href="https://pypi.org/project/sqlconnect/">
+         <img src="https://img.shields.io/pypi/v/sqlconnect" alt="PyPI">
       </a>
       <a href="https://sqlconnect.readthedocs.io/en/latest/?badge=latest">
          <img src="https://readthedocs.org/projects/sqlconnect/badge/?version=latest" alt="Documentation Status">
       </a>
-      <a href="https://github.com/JustinFrizzell/SQLconnect/blob/main/LICENCE">
+      <a href="https://github.com/JustinFrizzell/sqlconnect/blob/main/LICENCE">
          <img src="https://img.shields.io/badge/License-MIT-purple.svg" alt="License: MIT">
       </a>
       <a href="https://github.com/psf/black">

@@ -1,6 +1,6 @@
 import pytest
 import yaml
-from SQLconnect import config
+from sqlconnect import config
 
 # Testing config.get_connection_config()
 

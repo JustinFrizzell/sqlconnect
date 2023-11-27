@@ -1,6 +1,6 @@
 """
 This module provides functionality for loading and validating SQL database connection configurations,
-used primarily by the SQLconnector class for establishing database connections.
+used primarily by the Sqlconnector class for establishing database connections.
 
 The module includes functions to retrieve connection configurations from a YAML file and to construct a 
 database connection URL. It supports dynamic configuration through file paths and dictionaries, and handles 
@@ -11,7 +11,7 @@ Functions:
     get_db_url: Constructs and returns a database connection string from a given configuration dictionary.
 
 Used By:
-    - SQLconnector: This class in a separate module utilises the functions provided here to manage database 
+    - Sqlconnector: This class in a separate module utilises the functions provided here to manage database 
       connections and operations.
 
 Dependencies:
@@ -21,7 +21,7 @@ Dependencies:
     - dotenv: Used for loading environment variables from '.env' files.
 
 Example Usage:
-    # Used within SQLconnector class
+    # Used within Sqlconnector class
     config = get_connection_config('my_connection')
     db_url = get_db_url(config)
 

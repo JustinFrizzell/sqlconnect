@@ -1,8 +1,8 @@
-import SQLconnect as sc
+import sqlconnect as sc
 
 # Set up database connections, all configuration is handled with connections.yaml and .env
-connection_logger = sc.SQLconnector("Logger")
-connection_WWI = sc.SQLconnector("WorldWideImporters")
+connection_logger = sc.Sqlconnector("Logger")
+connection_WWI = sc.Sqlconnector("WorldWideImporters")
 
 # Assign the results of a query to a pandas DataFrame
 df = connection_WWI.sql_to_df(r"example/query.sql")
