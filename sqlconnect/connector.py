@@ -1,6 +1,4 @@
 """
-This module provides the Sqlconnector class for managing SQL database connections and operations.
-
 The Sqlconnector class in this module is designed to aid database interactions using SQLAlchemy. 
 It includes methods for establishing database connections, executing SQL queries and commands, 
 and retrieving query results as pandas DataFrames. The class can be configured using either a 
@@ -13,12 +11,19 @@ Dependencies:
     - pandas: Used for handling query results as DataFrames.
     - sqlalchemy: Required for database connection and query execution.
     - pathlib: Utilised for handling file paths.
-    - SQLconnect: A custom module for handling configuration details.
+    - sqlconnect.config: A custom module for handling configuration details.
 
 Example:
-    from this_module import Sqlconnector
-    connector = Sqlconnector(connection_name='my_connection')
-    df = connector.sql_to_df('query.sql')
+    >>> import sqlconnect as sc
+    >>> 
+    >>> # Set up a database connection. All configuration is handled with connections.yaml and .env
+    >>> connection = sc.Sqlconnector("Database_PROD")
+    >>> 
+    >>> # Assign the results of a query to a pandas DataFrame
+    >>> df = connection.sql_to_df("query.sql")
+    >>> 
+    >>> # Explore the dataframe with Pandas
+    >>> print(df.describe())
 
 Note:
     Configuration details for database connections should be provided either through
