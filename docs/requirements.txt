@@ -1,0 +1,9 @@
+pandas
+sqlalchemy
+pyyaml
+pyodbc
+python-dotenv
+sphinx
+nx-copybutton
+furo
+myst_parser

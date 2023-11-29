@@ -22,14 +22,34 @@
 
 **SQLconnect** is a Python package designed to simplify the process of connecting to SQL databases. It uses a ``connections.yaml`` file for database configuration and a ``.env`` file for secure credentials management. SQLconnect supports executing SQL from ``.sql`` files or Python strings, and retrieving data into pandas DataFrames. This package is particularly useful for data analysts and developers who need a straightforward way to interact with SQL databases.
 
-Contents:
-=========
+Contents
+========
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
+   :includehidden:
+
+.. toctree::
+   :maxdepth: 3
+   :includehidden:
+   :caption: User Guide
 
    install
    tutorial
    documentation
-   license
 
-* :ref:`genindex`
+.. toctree::
+   :maxdepth: 2
+   :includehidden:
+   :caption: Development
+
+   Change Log <https://github.com/JustinFrizzell/sqlconnect/releases>
+   Release History <https://pypi.org/project/SQLconnect/#history>
+
+.. toctree::
+   :hidden:
+   :caption: Project Links
+
+   GitHub <https://github.com/JustinFrizzell/sqlconnect>
+   PyPI <https://pypi.org/project/sqlconnect/>
+   Licence <https://github.com/JustinFrizzell/sqlconnect/blob/main/LICENCE>
