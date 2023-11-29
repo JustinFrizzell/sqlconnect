@@ -1,4 +1,4 @@
-.. image:: https://raw.githubusercontent.com/JustinFrizzell/sqlconnect/main/images/logo.png
+.. image:: https://raw.githubusercontent.com/JustinFrizzell/sqlconnect/main/docs/_static/logo.png
    :alt: sqlconnect Logo
    :align: center
 
