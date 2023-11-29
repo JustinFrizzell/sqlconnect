@@ -30,7 +30,7 @@ TEST_CONFIG_DICT = {
 @pytest.fixture
 def mock_config_file_yaml(tmp_path):
     # Create a temporary YAML config file for testing
-    config_file = tmp_path / "connections.yaml"
+    config_file = tmp_path / "sqlconnect.yaml"
     yaml_content = yaml.dump(TEST_CONFIG_DICT)
     config_file.write_text(yaml_content)
 
