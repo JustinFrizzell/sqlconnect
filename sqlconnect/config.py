@@ -18,7 +18,7 @@ Dependencies:
     - os: Used for environment variable management.
     - pathlib: For file path manipulations.
     - yaml: Required for parsing YAML configuration files.
-    - dotenv: Used for loading environment variables from '.env' files.
+    - dotenv: Used for loading environment variables from 'sqlconnect.env' files.
 
 Example Usage:
     # Used within Sqlconnector class
@@ -29,7 +29,7 @@ Notes:
     - Configuration files should define connection parameters like 'sqlalchemy_driver', 'odbc_driver', 
       'server', 'database', and optionally 'username', 'password'.
     - Usernames and passwords should be referenced as environment variables in the format '${ENV_VAR}'.
-    - Attempts to load '.env' files from the current directory or the user's home directory for environment 
+    - Attempts to load 'sqlconnect.env' files from the current directory or the user's home directory for environment 
       variables.
 """
 import os
@@ -52,7 +52,7 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
         The name of the connection for which the configuration is to be retrieved.
     config_path : str, optional
         The path to the configuration file. If not provided, the function searches
-        in 'connections.yaml' or 'connections.yml' in the current directory, and
+        in 'sqlconnect.yaml' or 'sqlconnect.yml' in the current directory, and
         then in the user's home directory.
 
     Returns
@@ -83,10 +83,10 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
         [Path(config_path)]
         if config_path
         else [
-            Path("connections.yaml"),
-            Path("connections.yml"),
-            Path.home() / "connections.yaml",
-            Path.home() / "connections.yml",
+            Path("sqlconnect.yaml"),
+            Path("sqlconnect.yml"),
+            Path.home() / "sqlconnect.yaml",
+            Path.home() / "sqlconnect.yml",
         ]
     )
 
@@ -114,8 +114,8 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
             return connection_config
 
     raise FileNotFoundError(
-        f"Config file not found in {Path('connections.yaml').absolute()} "
-        f"or {Path.home() / 'connections.yaml'}"
+        f"Config file not found in {Path('sqlconnect.yaml').absolute()} "
+        f"or {Path.home() / 'sqlconnect.yaml'}"
     )
 
 
@@ -145,8 +145,8 @@ def get_db_url(connection_config: dict) -> str:
     ------
     EnvironmentError
         If 'username' and/or 'password' are specified as environment variables in the configuration
-        and these variables are not found in either the current directory's '.env' file or the
-        user's home directory '.env' file.
+        and these variables are not found in either the current directory's 'sqlconnect.env' file or the
+        user's home directory 'sqlconnect.env' file.
 
     Examples
     --------
@@ -163,7 +163,7 @@ def get_db_url(connection_config: dict) -> str:
 
     Notes
     -----
-    The function checks for '.env' files in the current directory and the user's home directory
+    The function checks for 'sqlconnect.env' files in the current directory and the user's home directory
     for environment variables if 'username' and 'password' are provided as environment variable keys.
     It uses `os.getenv` to retrieve these environment variables.
     """
@@ -177,10 +177,10 @@ def get_db_url(connection_config: dict) -> str:
     # Check for username and password
     auth_details = ""
     if "username" in connection_config and "password" in connection_config:
-        if Path(".env").exists():
-            load_dotenv(Path(".env"))
+        if Path("sqlconnect.env").exists():
+            load_dotenv(Path("sqlconnect.env"))
         else:
-            home_env_path = Path.home() / ".env"
+            home_env_path = Path.home() / "sqlconnect.env"
             if home_env_path.exists():
                 load_dotenv(home_env_path)
 
@@ -192,7 +192,7 @@ def get_db_url(connection_config: dict) -> str:
         if username is None or password is None:
             raise EnvironmentError(
                 f"Environment variables '{env_username_key}' and/or '{env_password_key}' not "
-                f"found in {Path('.env').absolute()} or {Path.home() / '.env'}"
+                f"found in {Path('sqlconnect.env').absolute()} or {Path.home() / 'sqlconnect.env'}"
             )
 
         auth_details = f"{username}:{password}@"

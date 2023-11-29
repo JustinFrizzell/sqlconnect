@@ -20,7 +20,7 @@
    </div>
    <div style="height: 20px;"></div> <!-- Spacer -->
 
-**SQLconnect** is a Python package designed to simplify the process of connecting to SQL databases. It uses a ``connections.yaml`` file for database configuration and a ``.env`` file for secure credentials management. SQLconnect supports executing SQL from ``.sql`` files or Python strings, and retrieving data into pandas DataFrames. This package is particularly useful for data analysts and developers who need a straightforward way to interact with SQL databases.
+**SQLconnect** is a Python package designed to simplify the process of connecting to SQL databases. It uses a ``sqlconnect.yaml`` file for database configuration and a ``sqlconnect.env`` file for secure credentials management. SQLconnect supports executing SQL from ``.sql`` files or Python strings, and retrieving data into pandas DataFrames. This package is particularly useful for data analysts and developers who need a straightforward way to interact with SQL databases.
 
 Contents
 ========

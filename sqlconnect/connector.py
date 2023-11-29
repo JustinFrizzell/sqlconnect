@@ -16,7 +16,7 @@ Dependencies:
 Example:
     >>> import sqlconnect as sc
     >>> 
-    >>> # Set up a database connection. All configuration is handled with connections.yaml and .env
+    >>> # Set up a database connection. All configuration is handled with sqlconnect.yaml and sqlconnect.env
     >>> connection = sc.Sqlconnector("Database_PROD")
     >>> 
     >>> # Assign the results of a query to a pandas DataFrame
