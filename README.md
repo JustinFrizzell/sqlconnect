@@ -1,5 +1,5 @@
 <div align="center">
-  <img alt="SQLconnect logo" src="https://raw.githubusercontent.com/JustinFrizzell/sqlconnect/main/images/logo.png"><br>
+  <img alt="SQLconnect logo" src="https://raw.githubusercontent.com/JustinFrizzell/sqlconnect/main/docs/_static/logo.png"><br>
 </div>
 
 ---

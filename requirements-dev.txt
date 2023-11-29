@@ -1,0 +1,11 @@
+pandas
+sqlalchemy
+pyyaml
+pyodbc
+python-dotenv
+setuptools
+wheel
+pytest
+furo
+sphinx-copybutton
+myst-parser
