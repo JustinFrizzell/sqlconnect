@@ -37,14 +37,12 @@ Contents
    install
    tutorial
    documentation
-   license
 
 .. toctree::
    :maxdepth: 2
    :includehidden:
    :caption: Development
 
-   contributing
    Change Log <https://github.com/JustinFrizzell/sqlconnect/releases>
    Release History <https://pypi.org/project/SQLconnect/#history>
 
@@ -54,3 +52,4 @@ Contents
 
    GitHub <https://github.com/JustinFrizzell/sqlconnect>
    PyPI <https://pypi.org/project/sqlconnect/>
+   Licence <https://github.com/JustinFrizzell/sqlconnect/blob/main/LICENCE>
