@@ -3,3 +3,5 @@ sqlalchemy
 pyyaml
 pyodbc
 python-dotenv
+pytest
+black
