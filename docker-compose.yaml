@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    environment:
+      DB_USER: user
+      DB_PASSWORD: password
+    volumes:
+      - .:/app
