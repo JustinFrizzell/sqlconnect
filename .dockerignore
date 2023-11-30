@@ -1,0 +1,41 @@
+# IDE
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Virtual Environments
+.venv
+venv/
+
+# Python Bytecode
+__pycache__/
+*.py[cod]
+*.py.class
+
+# Package Distribution / Build
+build/
+dist/
+*.egg-info/
+
+# Environment Variables
+*.env
+
+# Compiled Files
+*.pyc
+
+# Logs and Databases
+*.log
+*.sql
+*.sqlite
+
+# Operating System Specific
+.DS_Store
+Thumbs.db
+
+# Documentation Builds
+_build/
+
+# Temporary Files
+*.bak
+*.swp
+*.tmp
