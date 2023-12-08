@@ -17,9 +17,6 @@ build/
 dist/
 *.egg-info/
 
-# Environment Variables
-*.env
-
 # Compiled Files
 *.pyc
 

@@ -1,9 +1,23 @@
 version: '3.8'
+
 services:
   app:
     build: .
+    depends_on:
+      db:
+        condition: service_started
+    networks:
+      - app-network
+    command: ["./tests/integration/wait-for-it.sh", "db:5432", "--", "python", "-m", "pytest", "tests/"]
+
+  db:
+    image: postgres
     environment:
-      DB_USER: user
-      DB_PASSWORD: password
-    volumes:
-      - .:/app
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
