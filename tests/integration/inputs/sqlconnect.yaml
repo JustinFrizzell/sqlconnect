@@ -1,7 +1,7 @@
 connections:
   Postgres_Test:
     sqlalchemy_driver: 'postgresql+psycopg2'
-    server: 'db:5432'
+    server: 'postgres_db:5432'
     odbc_driver: ''
     database: 'postgres'
     username: '${POSTGRES_USERNAME}'
