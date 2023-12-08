@@ -5,6 +5,7 @@
 ---
 
 <p align="center">
+<a href="https://github.com/JustinFrizzell/sqlconnect/actions/workflows/tests.yaml"><img alt="CI-testing" src="https://github.com/JustinFrizzell/sqlconnect/actions/workflows/tests.yaml/badge.svg"></a>
 <a href="https://pypi.org/project/sqlconnect/"><img alt="PyPI" src="https://img.shields.io/pypi/v/sqlconnect"></a>
 <a href='https://sqlconnect.readthedocs.io/en/latest/?badge=latest'><img src='https://readthedocs.org/projects/sqlconnect/badge/?version=latest' alt='Documentation Status' /></a>
 <a href="https://github.com/JustinFrizzell/sqlconnect/blob/main/LICENCE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-purple.svg"></a>
