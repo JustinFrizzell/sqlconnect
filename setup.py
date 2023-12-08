@@ -13,7 +13,7 @@ setuptools.setup(
         "Documentation": "https://sqlconnect.readthedocs.io/en/latest/",
         "Source": "https://github.com/JustinFrizzell/sqlconnect",
     },
-    packages=setuptools.find_packages(),
+    packages=setuptools.find_packages(exclude=["tests", "tests.*"]),
     install_requires=["pandas", "sqlalchemy", "pyyaml", "pyodbc", "python-dotenv"],
     classifiers=[
         "License :: OSI Approved :: MIT License",
