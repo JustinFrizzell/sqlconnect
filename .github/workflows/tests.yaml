@@ -1,10 +1,10 @@
 on:
   push:
     branches:
-      - main
+      - integration-tests
   pull_request:
     branches:
-      - main
+      - integration-tests
 jobs:
   build:
     runs-on: ubuntu-latest
