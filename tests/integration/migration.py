@@ -10,7 +10,9 @@ from sqlalchemy import (
 from sqlalchemy.exc import SQLAlchemyError
 
 # Database credentials and connection details
-DATABASE_URL = "postgresql+psycopg2://postgres:mysecretpassword@localhost:5432/postgres"
+DATABASE_URL = (
+    "postgresql+psycopg2://postgres:mysecretpassword@postgres_db:5432/postgres"
+)
 
 # Create an engine instance
 engine = create_engine(DATABASE_URL)
