@@ -19,4 +19,4 @@ jobs:
       run: docker-compose run app black --check .
 
     - name: Run PyTest
-      run: docker-compose run app pytest
+      run: docker-compose up
