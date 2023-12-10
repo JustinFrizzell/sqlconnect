@@ -16,7 +16,7 @@ def setup_env():
     source_env = Path("tests/integration/inputs/postgres_sqlconnect.env")
     target_env = Path().home() / "sqlconnect.env"
 
-    target_env.write_text(source_env.read_text())
+    target_env.write_text(source_env.read_text(encoding="utf-8"))
 
     yield
 
@@ -30,7 +30,7 @@ def setup_connections():
     source_env = Path("tests/integration/inputs/postgres_sqlconnect.yaml")
     target_env = Path().home() / "sqlconnect.yaml"
 
-    target_env.write_text(source_env.read_text())
+    target_env.write_text(source_env.read_text(encoding="utf-8"))
 
     yield
 
@@ -38,8 +38,8 @@ def setup_connections():
         target_env.unlink()
 
 
-def test_my_function(setup_env, setup_connections):
-    conn = sc.Sqlconnector("Postgres_Test")
+def test_sql_to_df_str_postgres(setup_env, setup_connections):
+    conn = sc.Sqlconnector("Postgres")
 
     df = conn.sql_to_df_str(
         "SELECT name FROM public.employees WHERE position = 'Data Engineer'"

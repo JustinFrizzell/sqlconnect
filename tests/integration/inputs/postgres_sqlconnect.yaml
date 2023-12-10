@@ -1,5 +1,5 @@
 connections:
-  Postgres_Test:
+  Postgres:
     sqlalchemy_driver: 'postgresql+psycopg2'
     server: 'postgres_db:5432'
     odbc_driver: ''

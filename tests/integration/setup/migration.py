@@ -35,3 +35,37 @@ try:
         print("Data inserted successfully.")
 except SQLAlchemyError as e:
     print(f"An error occurred: {e}")
+
+# SQL Server Database credentials and connection details
+DATABASE_URL = "mssql+pyodbc://sa:MySecret%40Passw0rd@mssql_db:1433/master?driver=ODBC+Driver+17+for+SQL+Server"
+engine = create_engine(DATABASE_URL)
+
+metadata = MetaData()
+
+# Define the table
+employees = Table(
+    "employees",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("name", String),
+    Column("position", String),
+    Column("database_url", String),
+)
+
+# Create the table in the database
+metadata.create_all(engine)
+
+try:
+    with engine.connect() as connection:
+        # Insert data
+        data_to_insert = {
+            "id": 1,
+            "name": "Jane Doe",
+            "position": "Data Engineer",
+            "database_url": DATABASE_URL,
+        }
+        connection.execute(employees.insert(), data_to_insert)
+        connection.commit()
+        print("Data inserted successfully.")
+except SQLAlchemyError as e:
+    print(f"An error occurred: {e}")

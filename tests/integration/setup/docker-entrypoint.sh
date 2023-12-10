@@ -8,6 +8,9 @@
 echo "Waiting for Postgres to start"
 ./tests/integration/setup/wait-for-it.sh postgres_db:5432 
 
+echo "Waiting for MS SQL Server to start"
+./tests/integration/setup/wait-for-it.sh mssql_db:1433 
+
 echo "Migrating database"
 python ./tests/integration/setup/migration.py
 

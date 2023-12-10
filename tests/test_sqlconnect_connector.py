@@ -17,3 +17,6 @@ def test_Sqlconnector_connection_name_with_config_dict():
 
     # Assertions to check if the instance is initialised as expected
     assert connector.connection_name == "test_connection"
+
+
+# Test the sql functions for errors if given non-strings
