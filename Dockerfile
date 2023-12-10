@@ -26,4 +26,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./sqlconnect ./sqlconnect
 COPY ./tests ./tests
 
+RUN chmod +x /tests/integration/setup/docker-entrypoint.sh
+
 CMD ["python", "-m", "pytest"]

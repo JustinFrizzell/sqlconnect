@@ -18,5 +18,8 @@ jobs:
     - name: Check code formatting with Black
       run: docker-compose run app black --check .
 
+    - name: Check permissions
+      run: ls -l ./tests/integration/setup/
+
     - name: Run PyTest
       run: docker-compose up
