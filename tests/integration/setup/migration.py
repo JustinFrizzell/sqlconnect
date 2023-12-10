@@ -37,7 +37,7 @@ except SQLAlchemyError as e:
     print(f"An error occurred: {e}")
 
 # SQL Server Database credentials and connection details
-DATABASE_URL = "mssql+pyodbc://sa:MySecret%40Passw0rd@mssql_db:1433/master?driver=ODBC+Driver+17+for+SQL+Server"
+DATABASE_URL = "mssql+pyodbc://sa:MySecretPassw0rd!@mssql_db:1433/master?driver=ODBC+Driver+17+for+SQL+Server"
 engine = create_engine(DATABASE_URL)
 
 metadata = MetaData()
