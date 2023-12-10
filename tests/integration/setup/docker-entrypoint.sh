@@ -6,10 +6,10 @@
 # 3. Initiate pytest tests
 
 echo "Waiting for Postgres to start"
-/app/tests/integration/setup/wait-for-it.sh postgres_db:5432 
+./tests/integration/setup/wait-for-it.sh postgres_db:5432 
 
 echo "Migrating database"
-python /app/tests/integration/setup/migration.py
+python ./tests/integration/setup/migration.py
 
 echo "Starting pytest"
 python -m pytest
