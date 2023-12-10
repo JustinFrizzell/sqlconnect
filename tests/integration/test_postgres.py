@@ -1,37 +1,39 @@
+import os
 from pathlib import Path
 import pytest
 import pandas as pd
 import sqlconnect as sc
 
+if not os.environ.get("RUNNING_IN_DOCKER"):
+    pytest.skip(
+        "Skipping integration tests in local environment", allow_module_level=True
+    )
+
 
 @pytest.fixture(scope="function")
 def setup_env():
+    """Fixture to set up sqlconnect.env"""
     source_env = Path("tests/integration/inputs/postgres_sqlconnect.env")
-    target_env = Path("sqlconnect.env")
+    target_env = Path().home() / "sqlconnect.env"
 
-    # Setup: Copy the file to the target location
     target_env.write_text(source_env.read_text())
 
-    # Yield control to the test
     yield
 
-    # Cleanup: Remove the file after the test is done
     if target_env.exists():
         target_env.unlink()
 
 
 @pytest.fixture(scope="function")
 def setup_connections():
+    """Fixture to set up sqlconnect.yaml"""
     source_env = Path("tests/integration/inputs/postgres_sqlconnect.yaml")
-    target_env = Path("sqlconnect.yaml")
+    target_env = Path().home() / "sqlconnect.yaml"
 
-    # Setup: Copy the file to the target location
     target_env.write_text(source_env.read_text())
 
-    # Yield control to the test
     yield
 
-    # Cleanup: Remove the file after the test is done
     if target_env.exists():
         target_env.unlink()
 
