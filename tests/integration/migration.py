@@ -22,7 +22,7 @@ metadata = MetaData()
 
 # Define the table
 employees = Table(
-    "employees4",
+    "employees",
     metadata,
     Column("id", Integer, primary_key=True),
     Column("name", String),
@@ -38,7 +38,7 @@ try:
         # Raw SQL query to insert data
         raw_sql = text(
             """
-            INSERT INTO employees4 (id, name, position, database) 
+            INSERT INTO employees (id, name, position, database) 
             VALUES (:id, :name, :position, :database)
             """
         )

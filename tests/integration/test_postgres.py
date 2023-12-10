@@ -45,26 +45,10 @@ def setup_connections():
 def test_my_function(setup_env, setup_connections):
     conn = sc.Sqlconnector("Postgres_Test")
 
-    migration = """
-    CREATE TABLE public.employees (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(100),
-        role VARCHAR(100)
-    );
-    INSERT INTO public.employees (name, role) VALUES 
-    ('Alice Smith', 'Software Engineer'),
-    ('Bob Johnson', 'Project Manager'),
-    ('Carol Williams', 'Data Analyst');
-    """
-    conn.execute_sql_str(migration)
+    df = conn.sql_to_df_str(
+        "SELECT name FROM public.employees WHERE position = 'Data Engineer'"
+    )
 
-    df = conn.sql_to_df_str("SELECT * FROM public.employees")
-
-    ids = [1, 2, 3]
-    names = ["Alice Smith", "Bob Johnson", "Carol Williams"]
-    roles = ["Software Engineer", "Project Manager", "Data Analyst"]
-
-    # Create a DataFrame
-    expected = pd.DataFrame({"id": ids, "name": names, "role": roles})
+    expected = pd.DataFrame({"name": ["Jane Doe"]})
 
     pd.testing.assert_frame_equal(df, expected)
