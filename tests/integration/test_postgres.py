@@ -1,18 +1,12 @@
-# Need sqlconnect.yaml
-# Need sqlconnect.env
-
-# Use a fixture to copy yaml and env
-# test functions
-
-import pytest
 from pathlib import Path
+import pytest
 import pandas as pd
 import sqlconnect as sc
 
 
 @pytest.fixture(scope="function")
 def setup_env():
-    source_env = Path("tests/integration/inputs/sqlconnect.env")
+    source_env = Path("tests/integration/inputs/postgres_sqlconnect.env")
     target_env = Path("sqlconnect.env")
 
     # Setup: Copy the file to the target location
@@ -28,7 +22,7 @@ def setup_env():
 
 @pytest.fixture(scope="function")
 def setup_connections():
-    source_env = Path("tests/integration/inputs/sqlconnect.yaml")
+    source_env = Path("tests/integration/inputs/postgres_sqlconnect.yaml")
     target_env = Path("sqlconnect.yaml")
 
     # Setup: Copy the file to the target location
