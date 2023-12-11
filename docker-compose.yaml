@@ -6,6 +6,8 @@ services:
     depends_on:
       postgres_db:
         condition: service_started
+      mssql_db:
+        condition: service_started        
     environment:
       - RUNNING_IN_DOCKER=true        
     networks:

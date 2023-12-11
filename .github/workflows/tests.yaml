@@ -18,8 +18,14 @@ jobs:
     - name: Check code formatting with Black
       run: docker-compose run app black --check .
 
-    - name: Check permissions
-      run: ls -l ./tests/integration/setup/
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - name: Run PyTest
-      run: docker-compose up
+    - name: Start Docker Compose Services
+      run: docker-compose up -d
+
+    - name: Run Pytest
+      run: docker-compose run --rm app python -m pytest
+
+    - name: Stop and Remove Containers
+      run: docker-compose down
