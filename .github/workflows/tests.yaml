@@ -24,8 +24,8 @@ jobs:
     - name: Start Docker Compose Services
       run: docker-compose up -d
 
-    - name: Run Pytest
-      run: docker-compose run --rm app python -m pytest
+    - name: Run integration tests
+      run: docker-compose run --rm app sh ./tests/integration/setup/docker-entrypoint.sh
 
     - name: Stop and Remove Containers
       run: docker-compose down
