@@ -12,7 +12,6 @@ services:
       - RUNNING_IN_DOCKER=true        
     networks:
       - app-network
-    command: ["./tests/integration/setup/docker-entrypoint.sh"]
 
   postgres_db:
     image: postgres
