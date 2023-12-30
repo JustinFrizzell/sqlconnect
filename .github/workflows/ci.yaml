@@ -1,0 +1,31 @@
+on:
+  push:
+    paths-ignore:
+      - "docs/**"
+      - "*.md"  
+    branches:    
+      - main
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "*.md"  
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build the Docker image
+      run: docker-compose build
+
+    - name: Start Docker Compose Services
+      run: docker-compose up -d
+
+    - name: Run CI tests
+      run: docker-compose run --rm app sh ./tests/integration/setup/docker-entrypoint.sh
+
+    - name: Stop and Remove Containers
+      run: docker-compose down

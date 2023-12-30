@@ -1,9 +1,36 @@
 version: '3.8'
+
 services:
   app:
     build: .
+    depends_on:
+      postgres_db:
+        condition: service_started
+      mssql_db:
+        condition: service_started        
     environment:
-      DB_USER: user
-      DB_PASSWORD: password
-    volumes:
-      - .:/app
+      - RUNNING_IN_DOCKER=true        
+    networks:
+      - app-network
+
+  postgres_db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "mysecretpassword"
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+      
+  mssql_db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      SA_PASSWORD: "MySecretPassw0rd!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - app-network
+
+networks:
+  app-network:
