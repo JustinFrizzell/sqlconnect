@@ -22,7 +22,7 @@ WORKDIR /app
 COPY ./requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of your application
+# Copy the package and tests
 COPY ./sqlconnect ./sqlconnect
 COPY ./tests ./tests
 
