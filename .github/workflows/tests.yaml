@@ -15,16 +15,10 @@ jobs:
     - name: Build the Docker image
       run: docker-compose build
 
-    - name: Check code formatting with Black
-      run: docker-compose run app black --check .
-
-    - name: Checkout code
-      uses: actions/checkout@v3
-
     - name: Start Docker Compose Services
       run: docker-compose up -d
 
-    - name: Run integration tests
+    - name: Run CI tests
       run: docker-compose run --rm app sh ./tests/integration/setup/docker-entrypoint.sh
 
     - name: Stop and Remove Containers

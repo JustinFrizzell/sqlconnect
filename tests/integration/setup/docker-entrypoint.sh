@@ -16,3 +16,6 @@ python ./tests/integration/setup/migration.py
 
 echo "Starting pytest"
 python -m pytest
+
+echo "Checking formatted with Black"
+black --check .
