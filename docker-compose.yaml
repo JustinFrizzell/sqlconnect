@@ -8,6 +8,10 @@ services:
         condition: service_started
       mssql_db:
         condition: service_started        
+      oracle_db:
+        condition: service_started        
+      mysql_db:
+        condition: service_started        
     environment:
       - RUNNING_IN_DOCKER=true        
     networks:
@@ -38,6 +42,15 @@ services:
       ORACLE_PWD: "MySecretPassw0rd!"
     ports:
       - "1521:1521"
+    networks:
+      - app-network
+  
+  mysql_db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "MySecretPassw0rd!"
+    ports:
+      - "3306:3306"
     networks:
       - app-network
 
