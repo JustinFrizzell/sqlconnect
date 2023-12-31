@@ -1,0 +1,10 @@
+connections:
+  Oracle:
+    sqlalchemy_driver: 'oracle+oracledb'
+    server: 'oracle_db:1521'
+    odbc_driver: ''
+    database: ''
+    username: '${ORACLE_USERNAME}'
+    password: '${ORACLE_PASSWORD}'
+    options:
+      - 'service_name=XE'
