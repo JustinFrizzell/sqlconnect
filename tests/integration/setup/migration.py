@@ -36,6 +36,7 @@ DATABASE_URLS = [
     "postgresql+psycopg2://postgres:mysecretpassword@postgres_db:5432/postgres",
     "mssql+pyodbc://sa:MySecretPassw0rd!@mssql_db:1433/master?driver=ODBC+Driver+17+for+SQL+Server",
     "oracle+oracledb://system:MySecretPassw0rd!@oracle_db:1521/?service_name=XE",
+    "mysql+pymysql://root:MySecretPassw0rd!@mysql_db:3306/sys",
 ]
 
 for url in DATABASE_URLS:
