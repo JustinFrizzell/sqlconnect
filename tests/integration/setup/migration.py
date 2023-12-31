@@ -10,9 +10,9 @@ def create_table_and_insert_data(database_url):
         "employees",
         metadata,
         Column("id", Integer, primary_key=True),
-        Column("name", String),
-        Column("position", String),
-        Column("database_url", String),
+        Column("name", String(255)),
+        Column("position", String(255)),
+        Column("database_url", String(255)),
     )
 
     metadata.create_all(engine)
@@ -35,6 +35,7 @@ def create_table_and_insert_data(database_url):
 DATABASE_URLS = [
     "postgresql+psycopg2://postgres:mysecretpassword@postgres_db:5432/postgres",
     "mssql+pyodbc://sa:MySecretPassw0rd!@mssql_db:1433/master?driver=ODBC+Driver+17+for+SQL+Server",
+    "oracle+oracledb://system:MySecretPassw0rd!@oracle_db:1521/?service_name=XE",
 ]
 
 for url in DATABASE_URLS:
