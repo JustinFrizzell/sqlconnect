@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData
+from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData, URL
 from sqlalchemy.exc import SQLAlchemyError
 
 
@@ -23,7 +23,7 @@ def create_table_and_insert_data(database_url):
                 "id": 1,
                 "name": "Jane Doe",
                 "position": "Data Engineer",
-                "database_url": database_url,
+                "database_url": str(database_url),
             }
             connection.execute(employees.insert(), data_to_insert)
             connection.commit()
@@ -32,11 +32,45 @@ def create_table_and_insert_data(database_url):
         print(f"An error occurred: {e}")
 
 
+postgres_url = URL.create(
+    "postgresql+psycopg2",
+    host="postgres_db",
+    database="postgres",
+    username="postgres",
+    password="mysecretpassword",
+)
+
+mssql_url = URL.create(
+    "mssql+pyodbc",
+    host="mssql_db",
+    database="master",
+    username="sa",
+    password="MySecretPassw0rd!",
+    query={"driver": "ODBC Driver 17 for SQL Server"},
+)
+
+oracle_url = URL.create(
+    "oracle+oracledb",
+    host="oracle_db",
+    username="system",
+    password="MySecretPassw0rd!",
+    query={"service_name": "XE"},
+)
+
+mysql_url = URL.create(
+    "mysql+pymysql",
+    host="mysql_db",
+    database="sys",
+    username="root",
+    password="MySecretPassw0rd!",
+)
+
+
 DATABASE_URLS = [
-    "postgresql+psycopg2://postgres:mysecretpassword@postgres_db:5432/postgres",
-    "mssql+pyodbc://sa:MySecretPassw0rd!@mssql_db:1433/master?driver=ODBC+Driver+17+for+SQL+Server",
-    "oracle+oracledb://system:MySecretPassw0rd!@oracle_db:1521/?service_name=XE",
-    "mysql+pymysql://root:MySecretPassw0rd!@mysql_db:3306/sys",
+    postgres_url,
+    mssql_url,
+    oracle_url,
+    mysql_url,
 ]
 
 for url in DATABASE_URLS:
