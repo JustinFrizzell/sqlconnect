@@ -3,15 +3,6 @@ version: '3.8'
 services:
   app:
     build: .
-    depends_on:
-      postgres_db:
-        condition: service_started
-      mssql_db:
-        condition: service_started        
-      oracle_db:
-        condition: service_started        
-      mysql_db:
-        condition: service_started        
     environment:
       - RUNNING_IN_DOCKER=true        
     networks:
