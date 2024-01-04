@@ -38,7 +38,7 @@ def setup_connections():
         target_env.unlink()
 
 
-def test_sql_to_df_str_postgres(setup_env, setup_connections):
+def test_sql_to_df_str_oracle(setup_env, setup_connections):
     conn = sc.Sqlconnector("Oracle")
 
     df = conn.sql_to_df_str(
