@@ -1,8 +1,10 @@
 connections:
   Mssql:
-    sqlalchemy_driver: 'mssql+pyodbc'
-    server: 'mssql_db:1433'
-    odbc_driver: 'ODBC+Driver+17+for+SQL+Server'
+    dialect: 'mssql'
+    dbapi: 'pyodbc'
+    host: 'mssql_db'
     database: 'master'
     username: '${MSSQL_USERNAME}'
     password: '${MSSQL_PASSWORD}'
+    options: 
+      driver: 'ODBC Driver 17 for SQL Server'

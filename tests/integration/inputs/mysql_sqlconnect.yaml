@@ -1,8 +1,8 @@
 connections:
   Mysql:
-    sqlalchemy_driver: 'mysql+pymysql'
-    server: 'mysql_db:3306'
-    odbc_driver: ''
+    dialect: 'mysql'
+    dbapi: 'pymysql'
+    host: 'mysql_db'
     database: 'sys'
     username: '${MYSQL_USERNAME}'
     password: '${MYSQL_PASSWORD}'
