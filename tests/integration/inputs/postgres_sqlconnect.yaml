@@ -1,8 +1,8 @@
 connections:
   Postgres:
-    sqlalchemy_driver: 'postgresql+psycopg2'
-    server: 'postgres_db:5432'
-    odbc_driver: ''
+    dialect: 'postgresql'
+    dbapi: 'psycopg2'
+    host: 'postgres_db'
     database: 'postgres'
     username: '${POSTGRES_USERNAME}'
     password: '${POSTGRES_PASSWORD}'

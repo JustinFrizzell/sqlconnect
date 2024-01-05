@@ -3,15 +3,6 @@ version: '3.8'
 services:
   app:
     build: .
-    depends_on:
-      postgres_db:
-        condition: service_started
-      mssql_db:
-        condition: service_started        
-      oracle_db:
-        condition: service_started        
-      mysql_db:
-        condition: service_started        
     environment:
       - RUNNING_IN_DOCKER=true        
     networks:
@@ -20,7 +11,7 @@ services:
   postgres_db:
     image: postgres
     environment:
-      POSTGRES_PASSWORD: "mysecretpassword"
+      POSTGRES_PASSWORD: "test_p@ssword_f0r_CI!"
     ports:
       - "5432:5432"
     networks:
@@ -29,7 +20,7 @@ services:
   mssql_db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      SA_PASSWORD: "MySecretPassw0rd!"
+      SA_PASSWORD: "test_p@ssword_f0r_CI!"
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
@@ -39,7 +30,7 @@ services:
   oracle_db:
     image: container-registry.oracle.com/database/express:latest
     environment:
-      ORACLE_PWD: "MySecretPassw0rd!"
+      ORACLE_PWD: "test_p@ssword_f0r_CI!"
     ports:
       - "1521:1521"
     networks:
@@ -48,7 +39,7 @@ services:
   mysql_db:
     image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: "MySecretPassw0rd!"
+      MYSQL_ROOT_PASSWORD: "test_p@ssword_f0r_CI!"
     ports:
       - "3306:3306"
     networks:

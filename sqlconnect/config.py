@@ -36,6 +36,7 @@ import os
 from pathlib import Path
 import yaml
 from dotenv import load_dotenv
+from sqlalchemy import URL
 
 
 def get_connection_config(connection_name: str, config_path: str = None) -> dict:
@@ -102,7 +103,7 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
                 )
 
             # Check if all required keys are present
-            required_keys = ["sqlalchemy_driver", "odbc_driver", "server", "database"]
+            required_keys = ["dialect", "dbapi", "host"]
             missing_keys = [
                 key for key in required_keys if key not in connection_config
             ]
@@ -119,11 +120,11 @@ def get_connection_config(connection_name: str, config_path: str = None) -> dict
     )
 
 
-def get_db_url(connection_config: dict) -> str:
+def get_db_url(connection_config: dict) -> URL:
     """
-    Constructs and returns a database connection string from the given configuration dictionary.
+    Constructs and returns a database connection URL from the given configuration dictionary.
 
-    This function builds a database connection string suitable for SQLAlchemy, using
+    This function builds a database connection URL for SQLAlchemy, using
     details provided in a configuration dictionary. It handles the inclusion of
     authentication details securely by retrieving them from environment variables if
     necessary.
@@ -132,14 +133,14 @@ def get_db_url(connection_config: dict) -> str:
     ----------
     connection_config : dict
         A dictionary containing the database connection parameters. Expected keys include
-        'sqlalchemy_driver', 'odbc_driver', 'server', 'database', and optionally 'username',
-        'password', and 'options'. The 'username' and 'password' can be environment variable
-        keys enclosed in curly braces (e.g., "${ENV_VAR}").
+        'dialect', 'dbapi', 'host' and optionally 'username', 'password', and 'options'.
+        The 'username' and 'password' can be environment variable keys enclosed in
+        curly braces (e.g., "${ENV_VAR}").
 
     Returns
     -------
-    str
-        The constructed database connection string.
+    URL
+        The constructed database connection URL.
 
     Raises
     ------
@@ -147,58 +148,67 @@ def get_db_url(connection_config: dict) -> str:
         If 'username' and/or 'password' are specified as environment variables in the configuration
         and these variables are not found in either the current directory's 'sqlconnect.env' file or the
         user's home directory 'sqlconnect.env' file.
-
-    Examples
-    --------
-    >>> connection_config = {
-    ...     "sqlalchemy_driver": "mssql+pyodbc",
-    ...     "odbc_driver": "ODBC Driver 17 for SQL Server",
-    ...     "server": "my_server",
-    ...     "database": "my_database",
-    ...     "username": "${DB_USER}",
-    ...     "password": "${DB_PASS}"
-    ... }
-    >>> get_db_url(connection_config)
-    'mssql+pyodbc://username:password@my_server/my_database?driver=ODBC Driver 17 for SQL Server'
-
-    Notes
-    -----
-    The function checks for 'sqlconnect.env' files in the current directory and the user's home directory
-    for environment variables if 'username' and 'password' are provided as environment variable keys.
-    It uses `os.getenv` to retrieve these environment variables.
     """
 
-    sqlalchemy_driver = connection_config["sqlalchemy_driver"]
-    odbc_driver = connection_config["odbc_driver"]
-    server = connection_config["server"]
-    database = connection_config["database"]
-    options = "&".join([f"driver={odbc_driver}"] + connection_config.get("options", []))
+    # Required
+    dialect = connection_config["dialect"]
+    dbapi = connection_config["dbapi"]
+    host = connection_config["host"]
 
-    # Check for username and password
-    auth_details = ""
-    if "username" in connection_config and "password" in connection_config:
-        if Path("sqlconnect.env").exists():
-            load_dotenv(Path("sqlconnect.env"))
-        else:
-            home_env_path = Path.home() / "sqlconnect.env"
-            if home_env_path.exists():
-                load_dotenv(home_env_path)
+    # Optional
+    database = connection_config.get("database")
+    username, password = get_credentials(connection_config)
+    query = connection_config.get("options")
 
-        env_username_key = connection_config["username"].strip("${}")
-        env_password_key = connection_config["password"].strip("${}")
-        username = os.getenv(env_username_key)
-        password = os.getenv(env_password_key)
-
-        if username is None or password is None:
-            raise EnvironmentError(
-                f"Environment variables '{env_username_key}' and/or '{env_password_key}' not "
-                f"found in {Path('sqlconnect.env').absolute()} or {Path.home() / 'sqlconnect.env'}"
-            )
-
-        auth_details = f"{username}:{password}@"
-
-    # Construct the connection string
-    connection_string = (
-        f"{sqlalchemy_driver}://{auth_details}{server}/{database}?{options}"
+    return URL.create(
+        f"{dialect}+{dbapi}",
+        host=host,
+        database=database,
+        username=username,
+        password=password,
+        query=query,
     )
-    return connection_string
+
+
+def load_environment_file(file_paths: list[Path]):
+    """Load environment variables from the first existing .env file in the provided list of file paths."""
+    for file_path in file_paths:
+        if file_path.exists():
+            load_dotenv(file_path)
+            return True
+    return False
+
+
+def get_credentials(connection_config: dict) -> tuple:
+    """
+    Retrieves credentials from environment variables based on the provided connection configuration.
+    If 'username' or 'password' keys are not present in connection_config, returns None for them.
+
+    Parameters
+    ----------
+    connection_config (dict): A dictionary possibly containing keys 'username' and 'password' with environment variable names.
+
+    Returns
+    -------
+    tuple: A tuple containing the username and password, or None for each if not found.
+    """
+    load_environment_file([Path("sqlconnect.env"), Path.home() / "sqlconnect.env"])
+
+    env_username_key = connection_config.get("username")
+    env_password_key = connection_config.get("password")
+    if env_username_key:
+        env_username_key = env_username_key.strip("${}")
+    if env_password_key:
+        env_password_key = env_password_key.strip("${}")
+
+    # Get username and password from environment variables, or default to None.
+    username = os.getenv(env_username_key) if env_username_key else None
+    password = os.getenv(env_password_key) if env_password_key else None
+
+    if (env_username_key and not username) or (env_password_key and not password):
+        raise EnvironmentError(
+            f"Environment variables '{env_username_key}' and/or '{env_password_key}' not "
+            f"found in {Path('sqlconnect.env').absolute()} or {Path.home() / 'sqlconnect.env'}"
+        )
+
+    return username, password

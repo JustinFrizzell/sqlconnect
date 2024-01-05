@@ -11,14 +11,14 @@ DATABASE_URLS = [
         host="postgres_db",
         database="postgres",
         username="postgres",
-        password="mysecretpassword",
+        password="test_p@ssword_f0r_CI!",
     ),
     URL.create(
         "mssql+pyodbc",
         host="mssql_db",
         database="master",
         username="sa",
-        password="MySecretPassw0rd!",
+        password="test_p@ssword_f0r_CI!",
         query={"driver": "ODBC Driver 17 for SQL Server"},
     ),
     URL.create(
@@ -26,13 +26,13 @@ DATABASE_URLS = [
         host="mysql_db",
         database="sys",
         username="root",
-        password="MySecretPassw0rd!",
+        password="test_p@ssword_f0r_CI!",
     ),
     URL.create(
         "oracle+oracledb",
         host="oracle_db",
         username="system",
-        password="MySecretPassw0rd!",
+        password="test_p@ssword_f0r_CI!",
         query={"service_name": "XE"},
     ),
 ]
@@ -54,7 +54,7 @@ def insert_data(engine, employees, data):
         with engine.connect() as connection:
             connection.execute(employees.insert(), data)
             connection.commit()
-            print(f"Data inserted successfully into {connection.engine} ")
+            print(f"Test data inserted successfully into {connection.engine} ")
     except SQLAlchemyError as e:
         print(f"An error occurred during data insertion: {e}")
 

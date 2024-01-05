@@ -1,5 +1,6 @@
 import pytest
 import yaml
+from sqlalchemy import URL
 from sqlconnect import config
 
 # Testing config.get_connection_config()
@@ -7,21 +8,20 @@ from sqlconnect import config
 # Mock data for testing get_connection_config where a config path is supplied
 TEST_CONFIG_DICT = {
     "connections": {
-        "Database_DEV": {
-            "sqlalchemy_driver": "mssql+pyodbc",
-            "odbc_driver": "SQL+Server",
-            "server": "dev-server.database.com",
+        "Database_One": {
+            "dialect": "mssql",
+            "dbapi": "pyodbc",
+            "host": "dev-server.database.com",
             "database": "DevDB",
-            "options": ["Trusted_Connection=Yes"],
+            "options": {"Trusted_Connection": "Yes", "driver": "SQL Server"},
         },
-        "Database_TEST": {
-            "sqlalchemy_driver": "mssql+pyodbc",
-            "odbc_driver": "SQL+Server",
-            "server": "test-server.database.com",
-            "database": "TestDB",
+        "Database_Two": {
+            "dialect": "oracle",
+            "dbapi": "oracledb",
+            "host": "oracle_db",
             "username": "${DB_TEST_USERNAME}",
             "password": "${DB_TEST_PASSWORD}",
-            "options": ["Trusted_Connection=No"],
+            "options": {"service_name": "XE"},
         },
     }
 }
@@ -38,11 +38,11 @@ def mock_config_file_yaml(tmp_path):
 
 
 def test_get_connection_config_dev(mock_config_file_yaml):
-    # Test retrieval of Database_DEV connection config
+    # Test retrieval of Database_One connection config
     connection_config = config.get_connection_config(
-        "Database_DEV", str(mock_config_file_yaml)
+        "Database_One", str(mock_config_file_yaml)
     )
-    assert connection_config == TEST_CONFIG_DICT["connections"]["Database_DEV"]
+    assert connection_config == TEST_CONFIG_DICT["connections"]["Database_One"]
 
 
 def test_get_connection_config_test_with_env_vars(mock_config_file_yaml, monkeypatch):
@@ -50,7 +50,7 @@ def test_get_connection_config_test_with_env_vars(mock_config_file_yaml, monkeyp
     monkeypatch.setenv("DB_TEST_USERNAME", "test_user")
     monkeypatch.setenv("DB_TEST_PASSWORD", "test_password")
     connection_config = config.get_connection_config(
-        "Database_TEST", str(mock_config_file_yaml)
+        "Database_Two", str(mock_config_file_yaml)
     )
     assert connection_config["username"] == "${DB_TEST_USERNAME}"
     assert connection_config["password"] == "${DB_TEST_PASSWORD}"
@@ -59,7 +59,7 @@ def test_get_connection_config_test_with_env_vars(mock_config_file_yaml, monkeyp
 def test_get_connection_config_file_not_found():
     # Test FileNotFoundError if config file does not exist
     with pytest.raises(FileNotFoundError, match="^Config file not found in"):
-        config.get_connection_config("Database_DEV", "file_does_not_exist.yaml")
+        config.get_connection_config("Database_One", "file_does_not_exist.yaml")
 
 
 def test_get_connection_config_invalid_connection_name(mock_config_file_yaml):
@@ -72,9 +72,10 @@ def test_get_connection_config_invalid_connection_name(mock_config_file_yaml):
 MISSING_DETAILS_CONFIG_DICT = {
     "connections": {
         "Database_MISSING": {
-            # Assume 'server' and 'database' are required but missing
-            "sqlalchemy_driver": "mssql+pyodbc",
-            "odbc_driver": "SQL+Server",
+            # Assume 'dialect' and 'dbapi' are required but missing
+            "host": "dev-server.database.com",
+            "database": "DevDB",
+            "options": {"Trusted_Connection=Yes", "driver=SQL Server"},
         }
     }
 }
@@ -90,8 +91,7 @@ def mock_config_missing_details(tmp_path):
 
 
 def test_get_connection_config_missing_details(mock_config_missing_details):
-    # Test behavior when required details are missing
-    with pytest.raises(KeyError):  # Replace with the expected exception or behavior
+    with pytest.raises(KeyError):
         config.get_connection_config(
             "Database_MISSING", str(mock_config_missing_details)
         )
@@ -104,24 +104,28 @@ def test_get_connection_config_missing_details(mock_config_missing_details):
 @pytest.fixture
 def basic_config():
     return {
-        "sqlalchemy_driver": "mssql+pyodbc",
-        "odbc_driver": "ODBC Driver 17 for SQL Server",
-        "server": "my_server",
-        "database": "my_database",
+        "dialect": "mssql",
+        "dbapi": "pyodbc",
+        "host": "dev-server.database.com",
+        "database": "DevDB",
+        "options": {"Trusted_Connection": "Yes", "driver": "SQL Server"},
     }
 
 
-# Test for correct connection string generation
-def test_get_db_url_correct_connection_string(basic_config):
-    expected_string = (
-        "mssql+pyodbc://my_server/my_database?driver=ODBC Driver 17 for SQL Server"
+# Test for correct connection URL generation
+def test_get_db_url_correct_connection_url(basic_config):
+    expected_url = URL.create(
+        "mssql+pyodbc",
+        host="dev-server.database.com",
+        database="DevDB",
+        query={"Trusted_Connection": "Yes", "driver": "SQL Server"},
     )
-    assert config.get_db_url(basic_config) == expected_string
+    assert config.get_db_url(basic_config) == expected_url
 
 
 # Test for missing configuration keys
 def test_get_db_url_missing_configuration_keys(basic_config):
-    del basic_config["server"]
+    del basic_config["dialect"]
     with pytest.raises(KeyError):
         config.get_db_url(basic_config)
 
@@ -130,16 +134,24 @@ def test_get_db_url_missing_configuration_keys(basic_config):
 def test_get_db_url_env_var_authentication(monkeypatch):
     monkeypatch.setenv("DB_USER", "test_user")
     monkeypatch.setenv("DB_PASS", "test_pass")
+
     configuration = {
-        "sqlalchemy_driver": "mssql+pyodbc",
-        "odbc_driver": "ODBC Driver 17 for SQL Server",
-        "server": "my_server",
-        "database": "my_database",
+        "dialect": "oracle",
+        "dbapi": "oracledb",
+        "host": "oracle_db",
         "username": "${DB_USER}",
         "password": "${DB_PASS}",
+        "options": {"service_name": "XE"},
     }
-    expected_string = "mssql+pyodbc://test_user:test_pass@my_server/my_database?driver=ODBC Driver 17 for SQL Server"
-    assert config.get_db_url(configuration) == expected_string
+
+    expected_url = URL.create(
+        "oracle+oracledb",
+        host="oracle_db",
+        username="test_user",
+        password="test_pass",
+        query={"service_name": "XE"},
+    )
+    assert config.get_db_url(configuration) == expected_url
 
 
 # Test for missing environment variables
