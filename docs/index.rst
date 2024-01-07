@@ -5,6 +5,9 @@
 .. raw:: html
 
    <div style="text-align: center;">
+      <a href="https://github.com/JustinFrizzell/sqlconnect/actions/workflows/ci.yaml">
+         <img src="https://github.com/JustinFrizzell/sqlconnect/actions/workflows/ci.yaml/badge.svg" alt="CI-testing">
+      </a>
       <a href="https://pypi.org/project/sqlconnect/">
          <img src="https://img.shields.io/pypi/v/sqlconnect" alt="PyPI">
       </a>
@@ -20,7 +23,7 @@
    </div>
    <div style="height: 20px;"></div> <!-- Spacer -->
 
-**SQLconnect** is a Python package designed to simplify the process of connecting to SQL databases. It uses a ``sqlconnect.yaml`` file for database configuration and a ``sqlconnect.env`` file for secure credentials management. SQLconnect supports executing SQL from ``.sql`` files or Python strings, and retrieving data into pandas DataFrames. This package is particularly useful for data analysts and developers who need a straightforward way to interact with SQL databases.
+**SQLconnect** is a Python package designed to provide a straightforward way to interact with SQL databases (Postgres, Microsoft SQL Server, Oracle ect.). It enables direct population of DataFrames from .sql files. A ``sqlconnect.yaml`` file is used for database configuration and a ``sqlconnect.env`` file for secure credentials management.
 
 Contents
 ========
@@ -35,7 +38,6 @@ Contents
    :caption: User Guide
 
    install
-   tutorial
    documentation
 
 .. toctree::
