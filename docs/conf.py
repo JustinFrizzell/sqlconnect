@@ -63,7 +63,8 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = "sphinx"
+pygments_style = "default"
+pygments_dark_style = "material"
 
 # We need headers to be linkable to so ask MyST-Parser to autogenerate anchor IDs for
 # headers up to and including level 3.
