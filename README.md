@@ -12,27 +12,30 @@
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
 
-**SQLconnect** is a Python package designed to simplify the process of connecting to SQL databases. It uses a `sqlconnect.yaml` file for database configuration and a `sqlconnect.env` file for secure credentials management. SQLconnect supports executing SQL from `.sql` files or Python strings, and retrieving data into pandas DataFrames. This package is particularly useful for data analysts and developers who need a straightforward way to interact with SQL databases.
+**SQLconnect** is a Python package designed to provide a straightforward way to interact with SQL databases (Postgres, Microsoft SQL Server, Oracle ect.). It enables direct population of DataFrames from .sql files. A `sqlconnect.yaml` file is used for database configuration and a `sqlconnect.env` file for secure credentials management.
 
 ## Features
 
-- Allows easy configuration and management of database connections using a `sqlconnect.yaml` file.
+- Turn SQL queries into DataFrames in as few as 3 lines of code
 
-- Supports the use of a `sqlconnect.env` file for secure storage of database credentials, enhancing security.
+- Easy management of multiple database connections using a configuration file
 
-- Leverages SQLAlchemy for database connections, providing a robust and flexible framework for SQL operations.
+- Secure storage of database credentials using environment variables
 
-- Enables executing SQL queries and directly retrieving the results into pandas DataFrames, facilitating easy data manipulation and analysis.
+- Execute SQL queries and commands directly from .sql files or from a string
 
-- Capable of handling multiple database connections, allowing users to switch between different databases as needed.
+- Integration with SQLAlchemy & Pandas providing robust and flexible SQL operations
 
-- Provides functionality to execute SQL queries either by reading from an external file or directly from a string.
+```python
+import sqlconnect as sc
 
-## Installation
+connection = sc.Sqlconnector("My_Database") # Set up a database connection based on sqlconnect.yaml
 
-```bash
-pip install sqlconnect
+df = connection.sql_to_df("path/to/sql_query.sql") # Assign the results of a query to a DataFrame
+
+print(df.describe()) # Explore the DataFrame with Pandas
 ```
+
 
 ## Configuration
 
@@ -40,15 +43,23 @@ To use SQLconnect, create a `sqlconnect.yaml` file in the root of your project (
 
 ```yaml
 connections:
-  Database_PROD:
-    sqlalchemy_driver: 'mssql+pyodbc'
-    odbc_driver: 'SQL+Server'
-    server: 'prod-server.database.com'
-    database: 'ProdDB'
-    username: '${DB_PROD_USERNAME}' # References DB_PROD_USERNAME in sqlconnect.env
-    password: '${DB_PROD_PASSWORD}' # References DB_PROD_PASSWORD in sqlconnect.env
-    options:
-      - 'Trusted_Connection=No'
+  My_Database:
+    dialect: 'mssql'
+    dbapi: 'pyodbc'
+    host: 'prod-server.example.com'
+    database: 'master'
+    username: '${MSSQL_USERNAME}' # References MSSQL_USERNAME in sqlconnect.env
+    password: '${MSSQL_PASSWORD}' # References MSSQL_PASSWORD in sqlconnect.env
+    options: 
+      driver: 'ODBC Driver 17 for SQL Server'
+
+  A_Postgres_Database:
+    dialect: 'postgresql'
+    dbapi: 'psycopg2'
+    host: 'dbserver123.company.com'
+    database: 'postgres'
+    username: '${POSTGRES_USERNAME}'
+    password: '${POSTGRES_PASSWORD}'      
 ```
 
 Also create a `sqlconnect.env` file in the root of your project (or in your home directory) with the following example structure:
@@ -56,32 +67,23 @@ Also create a `sqlconnect.env` file in the root of your project (or in your home
 ```bash
 # This file should be kept secure and not checked into version control (add to .gitignore)
 # Production Database Credentials
-DB_PROD_USERNAME=prodUser
-DB_PROD_PASSWORD=prodPassword
+MSSQL_USERNAME=prodUsername
+MSSQL_PASSWORD=actualprodPassword
+POSTGRES_USERNAME=postgresProdUsername
+POSTGRES_PASSWORD=actualprodPassword
 ```
 
 Replace the example values with your actual database connection details.
 
-## Usage
-
-Here's a quick example to get you started:
-
-```python
-import sqlconnect as sc
-
-# Set up a database connection, all configuration is handled with sqlconnect.yaml and sqlconnect.env
-connection = sc.Sqlconnector("Database_PROD")
-
-# Assign the results of a query to a pandas DataFrame
-df = connection.sql_to_df("your_query.sql")
-
-# Explore the dataframe with pandas
-print(df.describe())
-```
-
 ## Documentation
 
 Full documentation for SQLconnect can be found at https://sqlconnect.readthedocs.io/
+
+## Installation
+
+```bash
+pip install sqlconnect
+```
 
 ## License
 
