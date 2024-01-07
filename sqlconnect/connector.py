@@ -213,3 +213,81 @@ class Sqlconnector:
             except Exception as e:
                 trans.rollback()  # Rollback in case of an error
                 print(f"An error occurred: {e}")
+
+    def df_to_sql(
+        self,
+        df: pd.DataFrame,
+        name: str,
+        schema: str = None,
+        if_exists: str = "fail",
+        index: bool = True,
+        index_label=None,
+        chunksize: int = None,
+        dtype=None,
+        method=None,
+    ) -> Union[int, None]:
+        """
+        Write a pandas DataFrame to a SQL database table.
+
+        This method allows for explicit control over how the DataFrame is written to the SQL table. The parameters correspond to those in pandas.DataFrame.to_sql, allowing for a detailed specification of the SQL writing process. See the pandas documentation for more details: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html
+
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            The DataFrame to be written to the SQL table.
+        name : str
+            Name of the SQL table to which the DataFrame should be written.
+        schema : str, optional
+            Specify the schema (if database flavor supports this). If None, use default schema.
+        if_exists : str, default 'fail'
+            How to behave if the table already exists. Values include 'fail', 'replace', 'append'.
+        index : bool, default True
+            Write DataFrame index as a column. Uses index_label as the column name in the table.
+        index_label : str or sequence, optional
+            Column label for index columns(s). If None is given and index is True, then the index names are used.
+        chunksize : int, optional
+            Specify the number of rows in each batch to be written at a time. By default, all rows will be written at once.
+        dtype : dict or scalar, optional
+            Specifying the datatype for columns. If a dictionary is used, the keys should be column names and the values should be SQLAlchemy types.
+        method : {None, 'multi', callable}, optional
+            Controls the SQL insertion clause used.
+
+        Returns
+        -------
+        Union[int, None]
+            The number of rows inserted, if known, otherwise None.
+
+        Raises
+        ------
+        RuntimeError
+            If there is an error in writing to the SQL table.
+        TypeError
+            If the provided DataFrame or table name is not of the correct type.
+
+        Examples
+        --------
+        >>> df = pd.DataFrame({'col1': [1, 2], 'col2': [3, 4]})
+        >>> connection.df_to_sql(df, 'table_name', if_exists='append', index=False)
+        This will write the DataFrame 'df' to the 'table_name' table in the connected SQL database, appending the data without including the index.
+        """
+
+        if not isinstance(df, pd.DataFrame):
+            raise TypeError("df must be a pandas DataFrame")
+        if not isinstance(name, str):
+            raise TypeError("name must be a string")
+
+        try:
+            result = df.to_sql(
+                name,
+                self.engine,
+                schema=schema,
+                if_exists=if_exists,
+                index=index,
+                index_label=index_label,
+                chunksize=chunksize,
+                dtype=dtype,
+                method=method,
+            )
+            return result
+        except Exception as e:
+            raise RuntimeError(f"Error writing to SQL table: {e}")
