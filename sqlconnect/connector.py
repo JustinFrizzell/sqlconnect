@@ -102,7 +102,7 @@ class Sqlconnector:
         Raises
         ------
         RuntimeError
-            If there is an error in executing the query.
+            If the file cannot be found or if there is an error in executing the query.
         TypeError
             If the provided query_path is not a string
 
@@ -112,12 +112,15 @@ class Sqlconnector:
         This will execute the SQL query and return a DataFrame, fetching 1000 rows at a time.
 
         """
-        if not isinstance(str(query_path), str):
+        if not isinstance(query_path, str):
             raise TypeError("query_path must be a string")
 
         try:
-            query = Path(str(query_path)).read_text(encoding="utf-8")
+            full_path = Path(query_path).resolve()
+            query = full_path.read_text(encoding="utf-8")
             return pd.read_sql_query(sql=query, conn=self.engine, **kwargs)
+        except FileNotFoundError:
+            raise RuntimeError(f"File not found at: {full_path}")
         except Exception as e:
             raise RuntimeError(f"Error executing query: {e}")
 
@@ -176,19 +179,24 @@ class Sqlconnector:
 
         Raises
         ------
-        Exception
-            If there is an error in executing the command.
+        RuntimeError
+            If there is an error in reading the file or executing the SQL command.
+            This includes file not found errors and other general exceptions.
         """
         with self.engine.connect() as connection:
             trans = connection.begin()
             try:
-                command = Path(sql_path).read_text(encoding="utf-8")
+                full_path = Path(sql_path).resolve()
+                command = full_path.read_text(encoding="utf-8")
                 command = text(command)
                 connection.execute(command)
                 trans.commit()  # Explicitly commit the transaction
+            except FileNotFoundError:
+                trans.rollback()  # Rollback in case of an error
+                raise RuntimeError(f"File not found at: {full_path}")
             except Exception as e:
                 trans.rollback()  # Rollback in case of an error
-                print(f"An error occurred: {e}")
+                raise RuntimeError(f"An error occurred: {e}")
 
     def execute_sql_str(self, command: str) -> None:
         """
