@@ -48,3 +48,37 @@ def test_sql_to_df_str_postgres(setup_env, setup_connections):
     expected = pd.DataFrame({"name": ["Jane Doe"]})
 
     pd.testing.assert_frame_equal(df, expected)
+
+
+def test_sql_to_df_postgres(setup_env, setup_connections):
+    conn = sc.Sqlconnector("Postgres")
+
+    df = conn.sql_to_df("tests/integration/sql/test_employees.sql")
+
+    expected = pd.DataFrame({"name": ["Jane Doe"]})
+
+    pd.testing.assert_frame_equal(df, expected)
+
+
+def test_execute_sql_str_postgres(setup_env, setup_connections):
+    conn = sc.Sqlconnector("Postgres")
+    conn.execute_sql_str(
+        """ INSERT INTO public.employees
+            (id, "name", "position", database_url)
+            VALUES
+            (3, 'John S', 'Data Engineer', 'http://example.com/db/johns');
+        """
+    )
+
+
+def test_execute_sql_postgres(setup_env, setup_connections):
+    conn = sc.Sqlconnector("Postgres")
+    conn.execute_sql("tests/integration/sql/test_insert_record.sql")
+
+
+def test_df_to_sql_postgres(setup_env, setup_connections):
+    conn = sc.Sqlconnector("Postgres")
+
+    df = pd.DataFrame({"col1": [1, 2], "col2": [3, 4]})
+
+    conn.df_to_sql(df, "table_name", if_exists="append", index=False)
