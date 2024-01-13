@@ -118,7 +118,7 @@ class Sqlconnector:
         try:
             full_path = Path(query_path).resolve()
             query = full_path.read_text(encoding="utf-8")
-            return pd.read_sql_query(sql=query, conn=self.engine, **kwargs)
+            return pd.read_sql_query(sql=query, con=self.engine, **kwargs)
         except FileNotFoundError:
             raise RuntimeError(f"File not found at: {full_path}")
         except Exception as e:
