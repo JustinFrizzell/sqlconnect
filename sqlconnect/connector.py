@@ -77,7 +77,14 @@ class Sqlconnector:
         self.engine = sqlalchemy.create_engine(self.__database_url)
 
     def sql_to_df(
-        self, query_path: str, **kwargs
+        self,
+        query_path: str,
+        index_col=None,
+        coerce_float=True,
+        params=None,
+        parse_dates=None,
+        chunksize=None,
+        dtype=None,
     ) -> Union[pd.DataFrame, Generator[pd.DataFrame, None, None]]:
         """
         Execute a SQL query from a file and return the results in a pandas DataFrame.
@@ -88,10 +95,19 @@ class Sqlconnector:
         ----------
         query_path : str
             The file path of the SQL query to be executed.
-
-        **kwargs
-            Additional keyword arguments to be passed directly to pandas.read_sql_query.
-            This can include parameters like 'chunksize', 'parse_dates', etc.
+        index_col : str or list of str, optional, default: None
+            Column(s) to set as index(MultiIndex).
+        coerce_float : bool, default True
+            Attempts to convert values of non-string, non-numeric objects (like decimal.Decimal) to floating point.
+        params : list, tuple or dict, optional, default: None
+            List of parameters to pass to execute method.
+        parse_dates : list or dict, default: None
+            - List of column names to parse as dates.
+            - Dict of {column_name: format string} where format string is strftime compatible in case of parsing string times or is one of (D, s, ns, ms, us) in case of parsing integer timestamps.
+        chunksize : int, optional
+            Return Pandas DataFrames as a generator.
+        dtype : Type name or dict of column -> type, optional
+            Data type for data or columns. E.g. {'a': np.float64, 'b': np.int32, 'c': 'Int64'}.
 
         Returns
         -------
@@ -108,9 +124,8 @@ class Sqlconnector:
 
         Examples
         --------
+        >>> # This will execute the SQL query and return a DataFrame, fetching 1000 rows at a time.
         >>> df = connection.sql_to_df("path/to/sql_query.sql", chunksize=1000)
-        This will execute the SQL query and return a DataFrame, fetching 1000 rows at a time.
-
         """
         if not isinstance(query_path, str):
             raise TypeError("query_path must be a string")
@@ -118,14 +133,30 @@ class Sqlconnector:
         try:
             full_path = Path(query_path).resolve()
             query = full_path.read_text(encoding="utf-8")
-            return pd.read_sql_query(sql=query, con=self.engine, **kwargs)
+            return pd.read_sql_query(
+                sql=query,
+                con=self.engine,
+                index_col=index_col,
+                coerce_float=coerce_float,
+                params=params,
+                parse_dates=parse_dates,
+                chunksize=chunksize,
+                dtype=dtype,
+            )
         except FileNotFoundError:
             raise RuntimeError(f"File not found at: {full_path}")
         except Exception as e:
             raise RuntimeError(f"Error executing query: {e}")
 
     def sql_to_df_str(
-        self, query: str, **kwargs
+        self,
+        query: str,
+        index_col=None,
+        coerce_float=True,
+        params=None,
+        parse_dates=None,
+        chunksize=None,
+        dtype=None,
     ) -> Union[pd.DataFrame, Generator[pd.DataFrame, None, None]]:
         """
         Execute a SQL query from a string and return the results in a pandas DataFrame.
@@ -136,10 +167,19 @@ class Sqlconnector:
         ----------
         query : str
             The SQL query to be executed.
-
-        **kwargs
-            Additional keyword arguments to be passed directly to pandas.read_sql_query.
-            This can include parameters like 'chunksize', 'parse_dates', etc.
+        index_col : str or list of str, optional, default: None
+            Column(s) to set as index(MultiIndex).
+        coerce_float : bool, default True
+            Attempts to convert values of non-string, non-numeric objects (like decimal.Decimal) to floating point.
+        params : list, tuple or dict, optional, default: None
+            List of parameters to pass to execute method.
+        parse_dates : list or dict, default: None
+            - List of column names to parse as dates.
+            - Dict of {column_name: format string} where format string is strftime compatible in case of parsing string times or is one of (D, s, ns, ms, us) in case of parsing integer timestamps.
+        chunksize : int, optional
+            Return Pandas DataFrames as a generator.
+        dtype : Type name or dict of column -> type, optional
+            Data type for data or columns. E.g. {'a': np.float64, 'b': np.int32, 'c': 'Int64'}.
 
         Returns
         -------
@@ -152,19 +192,28 @@ class Sqlconnector:
         RuntimeError
             If there is an error in executing the query.
         TypeError
-            If the provided query_path is not a string
+            If the provided query is not a string
 
         Examples
         --------
-        >>> df = connection.sql_to_df_str("SELECT * FROM Company.Employees", chunksize=1000)
-        This will execute the SQL query and return a DataFrame, fetching 1000 rows at a time.
+        >>> # This will execute the SQL query and return a DataFrame, fetching 1000 rows at a time.
+        >>> df = connection.sql_to_df_str("SELECT * FROM company.employees", chunksize=1000)
         """
 
-        if not isinstance(str(query), str):
+        if not isinstance(query, str):
             raise TypeError("query must be a string")
 
         try:
-            return pd.read_sql_query(str(query), self.engine, **kwargs)
+            return pd.read_sql_query(
+                sql=query,
+                con=self.engine,
+                index_col=index_col,
+                coerce_float=coerce_float,
+                params=params,
+                parse_dates=parse_dates,
+                chunksize=chunksize,
+                dtype=dtype,
+            )
         except Exception as e:
             raise RuntimeError(f"Error executing query: {e}")
 
