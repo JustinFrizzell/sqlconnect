@@ -22,7 +22,6 @@ dist/
 
 # Logs and Databases
 *.log
-*.sql
 *.sqlite
 
 # Operating System Specific
