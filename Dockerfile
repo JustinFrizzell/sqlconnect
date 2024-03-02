@@ -18,11 +18,10 @@ RUN apt-get clean \
 
 WORKDIR /app
 
-# Copy requirements and install Python dependencies
-COPY ./requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the package and tests
-COPY ./sqlconnect ./sqlconnect
+# Install SQLConnect package and dev dependencies
+COPY ./src ./src
 COPY ./tests ./tests
-
+COPY pyproject.toml README.md ./
+RUN pip install pytest ruff build twine
+RUN python -m build
+RUN pip install dist/*.whl

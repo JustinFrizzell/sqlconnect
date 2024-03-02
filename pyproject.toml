@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sqlconnect"
+version = "0.3.1"
+authors = [{ name = "Justin Frizzell" }]
+description = "Simplifies connections to SQL databases for data analysts. Populate DataFrames with the results of queries directly from .sql files."
+readme = "README.md"
+keywords = ["SQL", "database", "connection", "configuration"]
+license = { text = "MIT License" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Topic :: Database",
+]
+
+requires-python = ">=3.8"
+
+dependencies = [
+    "pandas>=2.0.0",
+    "sqlalchemy>=2.0.0",
+    "pyyaml>=6.0.0",
+    "python-dotenv>=1.0.0",
+    "pyodbc>=5.0.0",
+    "psycopg2-binary>=2.0.0",
+    "oracledb>=2.0.0",
+    "PyMySQL>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/JustinFrizzell/sqlconnect"
+Documentation = "https://sqlconnect.readthedocs.io/en/latest/"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0", "ruff>=0.3.0", "build>1.0.0", "twine>=5.0.0"]
