@@ -9,15 +9,15 @@ import sys
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.insert(0, os.path.abspath("../"))
+sys.path.insert(0, os.path.abspath("../src"))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "sqlconnect"
-copyright = "2023, Justin Frizzell"
+copyright = "2024, Justin Frizzell"
 author = "Justin Frizzell"
-release = "0.2.0"
+release = "0.3.1"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
